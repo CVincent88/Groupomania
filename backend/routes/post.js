@@ -4,14 +4,14 @@ const auth = require('../middlewares/auth');
 
 const posts = require("../controllers/post");
 
-// Create a new post
-router.post("/", auth, multer, posts.createPost);
-
 // Get all posts
 router.get("/", auth, posts.findAllPosts);
 
 // Get one post
 router.get("/:id", auth, posts.findOne);
+
+// Create a new post
+router.post("/", auth, multer, posts.createPost);
 
 // Modify one post
 router.put("/:id", auth, multer, posts.updatePost);
