@@ -92,3 +92,17 @@ exports.findAllByAuthor = (req, res) => {
         res.status(500).send({ message: err.message || "Some error occurred while retrieving tutorials." });
         });
 };
+
+
+exports.findUserByPost = (req, res) => {
+    const id = req.params.id
+    Post.findOne({
+        where: {id: id}, include: ['author']
+    })
+        .then((User) => {
+            res.send(User)
+        })
+        .catch((err) => {
+            res.send.json({ error: err})
+        })
+}

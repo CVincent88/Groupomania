@@ -16,4 +16,7 @@ router.delete("/:id", auth, multer, users.deleteUser);
 // Update user account
 router.put("/:id", auth, multer, users.updateUser);
 
+// Find all posts of a specific user
+router.get("/:id/posts", multer, users.findPostsByUser);
+
 module.exports = router;

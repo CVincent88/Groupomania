@@ -107,7 +107,7 @@ exports.deleteUser = (req, res) => {
 };
 
 // Modify a user account.
-exports.updateUser = (req, res, next) => {
+exports.updateUser = (req, res) => {
     const id = req.params.id;
 
     // Création d'un nouvel objet. Si pas d'image, alors on envoie req.body, si une image, on la nomme accordingly.
@@ -128,4 +128,17 @@ exports.updateUser = (req, res, next) => {
         .catch(err => {
             res.status(500).send({ message: "Error updating User account with id=" + id });
         });
+};
+
+// Find all posts of a specific user
+exports.findPostsByUser = (req, res) => {
+    const userId = req.params.id;
+
+    User.findByPk(userId, {include: ['publications']})
+    .then((user) => {
+        res.send(user)
+    })
+    .catch((err) => {
+    console.log("Error while find company : ", err)
+    })
 };

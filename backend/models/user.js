@@ -30,6 +30,9 @@ module.exports = (sequelize, Sequelize) => {
             defaultValue: 0
         },
     });
+    User.associate = function(models) {
+        User.hasMany(models.post, {foreignKey: {name: 'authorId'}, onDelete: "cascade", as: 'publications'})
+    };
 
     return User;
 };

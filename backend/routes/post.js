@@ -10,6 +10,9 @@ router.get("/", auth, posts.findAllPosts);
 // Get one post
 router.get("/:id", auth, posts.findOne);
 
+// Get all posts of a specific user
+router.get("/:id/author", auth, posts.findUserByPost);
+
 // Create a new post
 router.post("/", auth, multer, posts.createPost);
 
@@ -19,7 +22,6 @@ router.put("/:id", auth, multer, posts.updatePost);
 // Delete one post
 router.delete("/:id", auth, posts.deletePost);
 
-// Find all posts by author
-router.get("/author/:authorId", auth, posts.findAllByAuthor);
+
 
 module.exports = router;
