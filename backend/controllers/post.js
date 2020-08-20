@@ -1,7 +1,8 @@
 const models = require('../models');
 const Post = models.post;
+const jwt = require('jsonwebtoken');
 
-// Create and Save a new post
+// Create and Save a new post.
 exports.createPost = (req, res) => {
     // Validate request
     if (!req.body.content) {
@@ -50,50 +51,69 @@ exports.findOne = (req, res) => {
 
 // Modify a post from the database.
 exports.updatePost = (req, res, next) => {
-    const id = req.params.id;
-    
-    Post.update(req.body, {where: { id: id }})
-        .then(updatedRows => {
-            if (updatedRows == 1) {
-            res.status(200).json({ message: "Your post was updated successfully." });
-            } else {
-            res.status(400).json({ message: `Cannot update the post with id=${id}. Maybe post was not found or req.body is empty!` });
+    // Appel du jwt pour empêcher de supprimer un post depuis un logiciel tiers (e.g. Postman)
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
+    const userId = decodedToken.userId;
+    const postId = req.params.id;
+
+    // We first look for the post
+    Post.findOne({ where: { id: postId } })
+        .then((post) => {
+            if(userId === post.authorId){
+                Post.update(req.body, {where: { id: postId }})
+                .then(updatedRows => {
+                    if (updatedRows == 1) {
+                    res.status(200).json({ message: "Your post was updated successfully." });
+                    } else {
+                    res.status(400).json({ message: `Cannot update the post with id=${id}. Maybe post was not found or req.body is empty!` });
+                    }
+                })
+                .catch(err => {
+                    res.status(500).send({ message: "Error updating the post with id=" + id });
+                });
             }
         })
-        .catch(err => {
-            res.status(500).send({ message: "Error updating the post with id=" + id });
-        });
+        .catch((err) =>{
+            res.status(500).json({ error: "Error while looking for the post"})
+        })
 };
 
 // Delete a post from database.
 exports.deletePost = (req, res) => {
-const id = req.params.id;
+    // Appel du jwt pour empêcher de supprimer un post depuis un logiciel tiers (e.g. Postman)
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
+    const userId = decodedToken.userId;
+    const postId = req.params.id;
 
-Post.destroy({ where: { id: id } })
-    .then(num => {
-        if (num == 1) {
-            res.status(200).json({ message: "Post was deleted successfully!"});
-        } else {
-            res.send({ message: `Cannot delete post with id=${id}. Maybe the post was not found!`});
-        }
-    })
-    .catch(err => {
-    res.status(500).send({ message: "Could not delete post with id=" + id});
-    });
-};
-
-// Finds all post by one author
-exports.findAllByAuthor = (req, res) => {
-    Post.findAll({ where: { authorId: req.params.authorId } })
-        .then(data => {
-            res.status(200).json(data);
+        // We first look for the post
+    Post.findOne({ where: { id: postId } })
+        .then((post) => {
+            // We make sure that the author of the post is the one trying to delete it
+            if(userId === post.authorId){
+                Post.destroy({ where : {id: postId}})
+                    .then(num => {
+                        if (num == 1) {
+                            res.status(200).json({ message: "Post was deleted successfully!"});
+                        } else {
+                            res.send({ message: `Cannot delete post with id=${postId}. Maybe the post was not found!`});
+                        }
+                    })
+                    .catch(err => {
+                    res.status(500).send({ message: "Could not delete post with id=" + postId});
+                    });
+            } 
+            else {
+                res.status(401).json({ Error: 'You are not authorized to delete this post'});
+            }
         })
-        .catch(err => {
-        res.status(500).send({ message: err.message || "Some error occurred while retrieving tutorials." });
-        });
+        .catch((err) =>{
+            res.status(500).json({ error: "Error while looking for the post"})
+        })
 };
 
-
+// Find a post and its author.
 exports.findUserByPost = (req, res) => {
     const id = req.params.id
     Post.findOne({
@@ -106,3 +126,4 @@ exports.findUserByPost = (req, res) => {
             res.send.json({ error: err})
         })
 }
+

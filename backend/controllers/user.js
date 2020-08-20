@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 
-// Create and Save a new user
+// Create and Save a new user.
 exports.signup = (req, res) => {
     bcrypt.hash(req.body.password, 15)
         .then(hash => {
@@ -25,7 +25,7 @@ exports.signup = (req, res) => {
         });
 };
 
-// Login to an account
+// Login to an account.
 exports.login = function(req, res) {
     if(!req.body.emailAddress || !req.body.password) {
         res.status(404).json({ message: 'Username and password are needed!' });
@@ -46,7 +46,7 @@ exports.login = function(req, res) {
                             }
                             res.status(200).json({
                                 token: jwt.sign(
-                                    {emailAddress: user.emailAddress},
+                                    {userId: user.id},
                                     process.env.JWT_KEY,
                                     { expiresIn: '60m'}
                                 )
@@ -106,7 +106,7 @@ exports.deleteUser = (req, res) => {
     // });
 };
 
-// Modify a user account.
+// Modify user account.
 exports.updateUser = (req, res) => {
     const id = req.params.id;
 
@@ -130,7 +130,7 @@ exports.updateUser = (req, res) => {
         });
 };
 
-// Find all posts of a specific user
+// Find all posts of a specific user.
 exports.findPostsByUser = (req, res) => {
     const userId = req.params.id;
 

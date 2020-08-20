@@ -16,6 +16,9 @@ router.get("/:id/author", auth, posts.findUserByPost);
 // Create a new post
 router.post("/", auth, multer, posts.createPost);
 
+// Like or dislike a post
+// router.post("/:id/like", auth, multer, posts.opinionOnPost);
+
 // Modify one post
 router.put("/:id", auth, multer, posts.updatePost);
 
