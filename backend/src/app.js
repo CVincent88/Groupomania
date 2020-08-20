@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 require('dotenv').config();
 
@@ -15,10 +16,16 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+// parse requests of content-type - application/json
+app.use(bodyParser.urlencoded({ extended: true}));
+
+const db = require("../models/index");
+db.sequelize.sync();
+
 app.get('/', (req, res) => {
-  res.json({
-    message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
-  });
+    res.json({
+        message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
+    });
 });
 
 app.use('/api/v1', api);
