@@ -14,16 +14,16 @@ module.exports = (sequelize, Sequelize) => {
         },
         like: {
             type: Sequelize.INTEGER,
-            allowNull: true
+            allowNull: true,
+
         },
         dislike: {
             type: Sequelize.INTEGER,
-            allowNull: true
+            allowNull: true,
         },
     });
     Post.associate = function(models) {
         Post.belongsTo(models.user, {foreignKey: 'authorId', as: 'author'})
     };
-
     return Post;
 };

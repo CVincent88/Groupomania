@@ -7,9 +7,9 @@ Vue.use(VueRouter)
 
 const routes = [
 {
-   path: '/',
-   name: 'Home',
-   component: Home
+    path: '/',
+    name: 'Home',
+    component: Home
 },
 // {
 //   path: '/about',
@@ -20,14 +20,14 @@ const routes = [
 //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
 // },
 {
-   path: '/AccountSetting',
-   name: 'AccountSetting',
-   component: AccountSetting
+    path: '/AccountSetting',
+    name: 'AccountSetting',
+    component: AccountSetting
 }
 ]
 
 const router = new VueRouter({
-   routes
+    routes   
 })
 
 export default router

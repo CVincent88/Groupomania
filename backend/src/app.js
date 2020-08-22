@@ -25,7 +25,7 @@ const db = require("../models/index");
 db.sequelize.sync();
 
 app.get('/', (req, res) => {
-    res.json({
+    res.send({
         message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
     });
 });
