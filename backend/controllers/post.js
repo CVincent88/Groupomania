@@ -27,7 +27,7 @@ exports.createPost = (req, res) => {
 
 // Retrieve all posts from the database.
 exports.findAllPosts = (req, res) => {
-    Post.findAll()
+    Post.findAll({include: 'author'})
     .then(posts => {
         res.status(200).json(posts);
     })
