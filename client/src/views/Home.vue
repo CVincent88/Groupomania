@@ -7,12 +7,14 @@
         <div class="homeLoggedIn" v-else>
             <TopBanner/>
             <div class="wrapper">
-                <p class="error" v-if="error">{{ error }}</p>
-                <div class="post-thread" v-for="(post) in posts" :item="post" :key="post.id">
-                    <SinglePost :post="post" />
+                <CreatePost />
+                <div class="post-thread">
+                    <p class="error" v-if="error">{{ error }}</p>
+                    <div class="post-model" v-for="(post) in posts" :item="post" :key="post.id">
+                        <SinglePost :post="post" />
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -21,7 +23,8 @@
 // @ is an alias to /src
 import Connection from '@/views/Connection.vue'
 import TopBanner from '@/components/TopBanner.vue'
-import SinglePost from '@/components/SinglePost.vue'
+import SinglePost from '@/components/posts/SinglePost.vue'
+import CreatePost from '@/components/posts/CreatePost.vue'
 import postService from '@/postService.js'
 
 
@@ -31,7 +34,8 @@ export default {
     components: {
         TopBanner,
         Connection,
-        SinglePost
+        SinglePost,
+        CreatePost
     },
     data() {
         return {
@@ -59,15 +63,18 @@ export default {
     display: flex;
     flex-direction: column;
 
-    border: 1px solid black;
-
     & .post-thread{
-        display: flex;
-        flex-direction: column;
-        margin: 8px;
         padding: 10px;
-        background-color: #eff8fd;
-        border-radius: 10px 10px;
+
+        & .post-model{
+            display: flex;
+            flex-direction: column;
+            margin: 20px 8px;
+            padding: 10px;
+            background-color: #eff8fd;
+            border-radius: 10px 10px;
+            box-shadow: 2px 2px 10px rgba(195, 209, 216, .7);
+        }
     }
 }
 

@@ -11,8 +11,8 @@ state: {
         logo: "Logo Groupomania"
     },
     user: {
-        userAuthenticated: true,
-        // userAuthenticated: false,
+        // userAuthenticated: true,
+        userAuthenticated: false,
     }
 },
 mutations: {
