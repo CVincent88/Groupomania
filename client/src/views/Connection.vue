@@ -23,7 +23,7 @@
                     <input type="password" v-model="userObjectLogin.password">
                 </div>
 
-                <button v-on:click="userLogin()">Connexion</button>
+                <button v-on:click="login()">Connexion</button>
             </div>
 
             <div class="signup">
@@ -57,13 +57,13 @@
 
 <script>
 // import userService from '../userService.js'
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
     name: 'Connexion',
     data() {
         return {
-            URL: 'http://localhost:5000/api/v1/users/',
+            loginUrl: 'http://localhost:5000/api/v1/users/',
             userObjectSignup: {
                 emailAddress: '',
                 password: '',
@@ -78,26 +78,17 @@ export default {
         }
     },
     methods: {
-        userLogin(){
-            if(this.userObjectLogin.emailAddress != "" && this.userObjectLogin.password != ""){
-                axios.post(this.URL + 'login', {
-                    emailAddress: this.userObjectLogin.emailAddress,
-                    password: this.userObjectLogin.password
-                })
-                .then((response) => {
-                    this.result = response;
-                    console.log(`User connection info: `);
-                    console.log(this.result);
-                    // this.$emit("authenticated", true);
-                    sessionStorage.setItem('authenticated', true)
-                    this.$router.replace({ name: "Home" });
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-            }
+        login() {
+            this.$store.dispatch("login", {
+                emailAddress: this.userObjectLogin.emailAddress,
+                password: this.userObjectLogin.password,
+                URL: this.loginUrl
+            })
+            .then(() => {
+                this.$router.push("/Home")
+            });
         }
-    }
+    },
 }
 </script>
 

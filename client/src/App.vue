@@ -7,16 +7,6 @@
 <script>
 export default {
     name: 'App',
-    data() {
-        return {
-            authenticated: sessionStorage.getItem('authenticated'),
-        }
-    },
-    mounted() {
-        if(this.authenticated != true) {
-            this.$router.replace({ name: "Connection" });
-        }
-    },
 }
 </script>
 
