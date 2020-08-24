@@ -7,13 +7,22 @@
 <script>
 export default {
     name: 'App',
+    beforeMount() {
+        if(!localStorage.getItem('token') && this.$route.path != '/'){
+            this.$router.push("/")
+        }
+    }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+*{
+    box-sizing: border-box;
+}
 
 body{
     margin: 0;
+    padding: 0;
 }
 
 #app {

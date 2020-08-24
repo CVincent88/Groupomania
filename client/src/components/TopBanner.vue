@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="home-page">
-            <router-link to="/" class="profile-link">
+            <router-link to="/Home" class="profile-link">
                 <img src="../assets/icon.svg" :alt="$store.state.images.logo">
             </router-link>
             <div class="search-bar">
