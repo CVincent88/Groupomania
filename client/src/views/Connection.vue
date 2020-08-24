@@ -23,7 +23,7 @@
                     <input type="password" v-model="userObjectLogin.password">
                 </div>
 
-                <button v-on:click="login()">Connexion</button>
+                <button v-on:click="login(userObjectLogin.emailAddress, userObjectLogin.password)">Connexion</button>
             </div>
 
             <div class="signup">
@@ -41,14 +41,14 @@
                 </div>
 
                 <div class="signup_password">
-                    <input type="password" placeholder="Mot de passe">
+                    <input type="password" placeholder="Mot de passe" v-model="userObjectSignup.password1">
                 </div>
 
                 <div class="signup_password_confirmation" >
-                    <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password">
+                    <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password2">
                 </div>
 
-                <button>Inscription</button>
+                <button v-on:click="signup(userObjectSignup)">Inscription</button>
             </div>
         
         </div>
@@ -57,16 +57,17 @@
 
 <script>
 // import userService from '../userService.js'
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
     name: 'Connexion',
     data() {
         return {
-            loginUrl: 'http://localhost:5000/api/v1/users/',
+            URL: 'http://localhost:5000/api/v1/users/',
             userObjectSignup: {
                 emailAddress: '',
-                password: '',
+                password1: '',
+                password2: '',
                 firstName: '',
                 lastName: ''
             },
@@ -74,19 +75,39 @@ export default {
                 emailAddress: '',
                 password: ''
             },
-            result: {}
         }
     },
     methods: {
-        login() {
+        login(email, password) {
             this.$store.dispatch("login", {
-                emailAddress: this.userObjectLogin.emailAddress,
-                password: this.userObjectLogin.password,
-                URL: this.loginUrl
+                emailAddress: email,
+                password: password,
+                URL: this.URL
             })
             .then(() => {
                 this.$router.push("/Home")
             });
+        },
+        signup() {
+            if (this.userObjectSignup.password1 != this.userObjectSignup.password2){
+                console.log('Attention, les mots de passe ne correspondent pas')
+            }else{
+                axios.post(this.URL + 'signup', {
+                    emailAddress: this.userObjectSignup.emailAddress,
+                    password: this.userObjectSignup.password2,
+                    firstName: this.userObjectSignup.firstName,
+                    lastName: this.userObjectSignup.lastName,
+                })
+                .then((response) => {
+                    console.log(response);
+                    this.login(this.userObjectSignup.emailAddress, this.userObjectSignup.password2)
+                })
+            }
+        },
+        verifyConformity(password1, password2) {
+            if(password1 != password2){
+                return false
+            }
         }
     },
 }

@@ -25,11 +25,14 @@ exports.createPost = (req, res) => {
         });
 };
 
-// Retrieve all posts from the database.
+// Retrieve all posts from the database. (Sends them in descending order, last created first)
 exports.findAllPosts = (req, res) => {
-    Post.findAll({include: 'author'})
+    Post.findAll({include: 'author', order: [
+        ['createdAt', 'DESC']
+    ]})
     .then(posts => {
         res.status(200).json(posts);
+        console.log(posts)
     })
     .catch(err => {
         res.status(500).send({ message: err.message || "Some error occurred while retrieving posts." });

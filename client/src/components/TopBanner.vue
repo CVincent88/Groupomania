@@ -10,7 +10,7 @@
 
             <router-link to="/AccountSetting" class="profile-link">Mon profil</router-link>
 
-            <router-link to="/" @click="logout">Déconnexion</router-link>
+            <router-link @click="logout" to="/" >Déconnexion</router-link>
         </div>
     </div>
 </template>
@@ -20,8 +20,11 @@
 export default {
     name: 'TopBanner',
     methods: {
+        // logout() {
+        //     this.$store.dispatch('logout');
+        // }
         logout() {
-            this.$store.dispatch('logout');
+            window.localStorage.clear();
         }
     }
 }

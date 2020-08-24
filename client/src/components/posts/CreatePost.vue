@@ -1,16 +1,35 @@
 <template>
 <div class="post-creator">
-    <input type="text" name="post" id="post" placeholder="Que souaitez-vous publier ?">
-    <button>Publier</button>
+    <input type="text" name="post" id="post" placeholder="Que souaitez-vous publier ?" v-model="content">
+    <button @click="createPost">Publier</button>
 </div>
 </template>
 
 
 <script>
+import axios from 'axios'
+
 
 export default {
     name: 'CreatePost',
-
+    data() {
+        return {
+            URL: 'http://localhost:5000/api/v1/posts/',
+            content: '',
+            userId: localStorage.getItem('userId')
+        }
+    },
+    methods: {
+        createPost() {
+            axios.post(this.URL, {
+                authorId: this.userId,
+                content: this.content
+            })
+            .then((response) => {
+                console.log(response);
+            })
+        }
+    }
 }
 </script>
 
@@ -41,6 +60,7 @@ export default {
         outline: 0;
         background-color: #347BE7;
         width: 70%;
+        cursor: pointer;
 
     }
 }

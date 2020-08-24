@@ -8,6 +8,8 @@
                 <div class="post-model" v-for="(post) in posts" :item="post" :key="post.id">
                     <SinglePost :post="post" />
                 </div>
+                
+                
             </div>
         </div>
     </div>
@@ -19,8 +21,7 @@ import TopBanner from '@/components/TopBanner.vue'
 import SinglePost from '@/components/posts/SinglePost.vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
 import postService from '@/postService.js'
-
-
+// import axios from 'axios'
 
 export default {
     name: 'Home',
@@ -34,7 +35,7 @@ export default {
             posts: [],
             error: '',
             text: ''
-        }
+        }   
     },
     async created() {
         try{

@@ -15,9 +15,6 @@ state: {
     AccountSettingLink: "/AccountSetting",
     images: {
         logo: "Logo Groupomania"
-    },
-    state: {
-        authenticated: sessionStorage.getItem('authenticated')
     }
 },
 mutations: {
@@ -56,7 +53,8 @@ actions: {
         }
     },
     logout({ commit }) {
-        localStorage.removeItem("token");
+        // localStorage.removeItem("token");
+        localStorage.clear();
         commit(LOGOUT);
     }
 },
