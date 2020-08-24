@@ -10,9 +10,8 @@ state: {
     images: {
         logo: "Logo Groupomania"
     },
-    user: {
-        // userAuthenticated: true,
-        userAuthenticated: false,
+    state: {
+        authenticated: sessionStorage.getItem('authenticated')
     }
 },
 mutations: {

@@ -1,12 +1,24 @@
 <template>
     <div id="app">
-        <router-view/>
-        <div id="nav">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/AccountSetting">Account Setting</router-link>
-        </div>
+        <router-view />
     </div>
 </template>
+
+<script>
+export default {
+    name: 'App',
+    data() {
+        return {
+            authenticated: sessionStorage.getItem('authenticated'),
+        }
+    },
+    mounted() {
+        if(this.authenticated != true) {
+            this.$router.replace({ name: "Connection" });
+        }
+    },
+}
+</script>
 
 <style lang="scss">
 

@@ -1,14 +1,6 @@
 <template>
     <div>
-        <div class="connection-page" v-if="!$store.state.user.userAuthenticated">
-            <div class="connection-page_logo">
-                <router-link to="/">
-                <img src="../assets/icon-left-font-monochrome-white.svg" :alt="$store.state.logo">
-                </router-link>
-            </div>
-        </div>
-
-        <div class="home-page" v-else>
+        <div class="home-page">
             <router-link to="/" class="profile-link">
                 <img src="../assets/icon.svg" :alt="$store.state.images.logo">
             </router-link>
@@ -18,7 +10,7 @@
 
             <router-link to="/AccountSetting" class="profile-link">Mon profil</router-link>
 
-            <button class="disconnect">Déconnexion</button>
+            <router-link to="/" :click="logout()">Déconnexion</router-link>
         </div>
     </div>
 </template>
@@ -27,6 +19,11 @@
 
 export default {
     name: 'TopBanner',
+    methods: {
+        logout() {
+            sessionStorage.setItem('authenticated', false);
+        }
+    }
 }
 </script>
 

@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
                     res.status(201).json({ message: 'Account created!' });
                 })
                 .catch(function(err) {
-                    res.status(403).json({ message: 'Erreur lors de la création de compte' });
+                    res.status(403).json({ message: 'Erreur lors de la création de compte, l\'adresse email est probablement déjà enregistrée' });
                 });
         })
         .catch(err => {
@@ -49,7 +49,8 @@ exports.login = function(req, res) {
                                     {userId: user.id},
                                     process.env.JWT_KEY,
                                     { expiresIn: '60m'}
-                                )
+                                ),
+                                userId: user.id
                             })
                         })
                         .catch(err => {

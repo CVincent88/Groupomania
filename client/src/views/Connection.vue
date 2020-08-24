@@ -1,41 +1,51 @@
 <template>
     <div class="container">
 
-        <TopBanner/>
+        <div class="connection-page">
+            <div class="connection-page_logo">
+                <router-link to="/">
+                <img src="../assets/icon-left-font-monochrome-white.svg" :alt="$store.state.logo">
+                </router-link>
+            </div>
+        </div>
 
         <div class="forms">
             <div class="login">
                 <h2 class="registered">Déjà inscrit ?</h2>
 
                 <div class="email">
-                <label for="email">Email: </label>
-                <input type="text">
+                    <label for="email">Email: </label>
+                    <input type="text" v-model="userObjectLogin.emailAddress">
                 </div>
 
                 <div class="password">
-                <label for="password">Mot de passe: </label>
-                <input type="password">
+                    <label for="password">Mot de passe: </label>
+                    <input type="password" v-model="userObjectLogin.password">
                 </div>
 
-                <button>Connexion</button>
+                <button v-on:click="userLogin()">Connexion</button>
             </div>
 
             <div class="signup">
                 <h2 class="create-account">Créer un compte</h2>
-                <div class="signup_first-name">
-                <input type="text" placeholder="Prénom">
+                    <div class="signup_first-name">
+                    <input type="text" placeholder="Prénom" v-model="userObjectSignup.firstName">
                 </div>
 
                 <div class="signup_last-name">
-                <input type="text" placeholder="Nom de famille">
+                    <input type="text" placeholder="Nom de famille" v-model="userObjectSignup.lastName">
                 </div>
 
                 <div class="signup_email">
-                <input type="text" placeholder="Adresse email">
+                    <input type="text" placeholder="Adresse email" v-model="userObjectSignup.emailAddress">
                 </div>
 
                 <div class="signup_password">
-                <input type="password" placeholder="Mot de passe">
+                    <input type="password" placeholder="Mot de passe">
+                </div>
+
+                <div class="signup_password_confirmation" >
+                    <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password">
                 </div>
 
                 <button>Inscription</button>
@@ -46,18 +56,68 @@
 </template>
 
 <script>
-import TopBanner from '../components/TopBanner.vue'
+// import userService from '../userService.js'
+import axios from 'axios'
 
 export default {
     name: 'Connexion',
-    components: {
-        TopBanner
+    data() {
+        return {
+            URL: 'http://localhost:5000/api/v1/users/',
+            userObjectSignup: {
+                emailAddress: '',
+                password: '',
+                firstName: '',
+                lastName: ''
+            },
+            userObjectLogin: {
+                emailAddress: '',
+                password: ''
+            },
+            result: {}
+        }
+    },
+    methods: {
+        userLogin(){
+            if(this.userObjectLogin.emailAddress != "" && this.userObjectLogin.password != ""){
+                axios.post(this.URL + 'login', {
+                    emailAddress: this.userObjectLogin.emailAddress,
+                    password: this.userObjectLogin.password
+                })
+                .then((response) => {
+                    this.result = response;
+                    console.log(`User connection info: `);
+                    console.log(this.result);
+                    // this.$emit("authenticated", true);
+                    sessionStorage.setItem('authenticated', true)
+                    this.$router.replace({ name: "Home" });
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            }
+        }
     }
-
 }
 </script>
 
 <style lang="scss" scoped>
+
+.connection-page{
+    background-color: rgb(40, 108, 209);
+    height: 4.5em;
+    width: 100%;
+
+    &_logo{
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        & a img{
+        height: 50px;
+        }
+    }
+}
 
 .container{
     min-height: 100vh;
@@ -147,7 +207,7 @@ input{
     & .signup{
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr auto auto 1fr;
+        grid-template-rows: 1fr auto auto auto 1fr;
         justify-items: center;
         align-items: center;
 
@@ -189,8 +249,13 @@ input{
         }
 
         &_email{
-            grid-column: 1 / 2;
+            grid-column: 1 / 3;
             grid-row: 3 / 4;
+            justify-self: stretch;
+
+            & input{
+                width: 100%;
+            }
 
             @media screen and (max-width: 820px) {
                 grid-column: 1 / 3;
@@ -199,8 +264,8 @@ input{
         }
 
         &_password{
-            grid-column: 2 / 3;
-            grid-row: 3 / 4;
+            grid-column: 1 / 2;
+            grid-row: 4 / 5;
 
             @media screen and (max-width: 820px) {
                 grid-column: 1 / 3;
@@ -208,9 +273,18 @@ input{
             }
         }
 
+        &_password_confirmation{
+            grid-column: 2 / 3;
+            grid-row: 4 / 5;
+
+            & input::placeholder{
+                font-size: 1.1em;
+            }
+        }
+
         & button{
             grid-column: 1 / 3;
-            grid-row: 4 / 5;
+            grid-row: 5 / 6;
 
             background-color: rgb(0, 126, 6);
             color: #FFFFFF;

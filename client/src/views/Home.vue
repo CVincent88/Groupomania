@@ -1,18 +1,12 @@
 <template>
     <div class="home">
-        <div v-if="!$store.state.user.userAuthenticated">
-            <Connection/>
-        </div>
-
-        <div class="homeLoggedIn" v-else>
-            <TopBanner/>
-            <div class="wrapper">
-                <CreatePost />
-                <div class="post-thread">
-                    <p class="error" v-if="error">{{ error }}</p>
-                    <div class="post-model" v-for="(post) in posts" :item="post" :key="post.id">
-                        <SinglePost :post="post" />
-                    </div>
+        <TopBanner/>
+        <div class="wrapper">
+            <CreatePost />
+            <div class="post-thread">
+                <p class="error" v-if="error">{{ error }}</p>
+                <div class="post-model" v-for="(post) in posts" :item="post" :key="post.id">
+                    <SinglePost :post="post" />
                 </div>
             </div>
         </div>
@@ -21,7 +15,6 @@
 
 <script>
 // @ is an alias to /src
-import Connection from '@/views/Connection.vue'
 import TopBanner from '@/components/TopBanner.vue'
 import SinglePost from '@/components/posts/SinglePost.vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
@@ -33,7 +26,6 @@ export default {
     name: 'Home',
     components: {
         TopBanner,
-        Connection,
         SinglePost,
         CreatePost
     },
@@ -56,6 +48,10 @@ export default {
 
 
 <style lang="scss">
+
+*{
+    box-sizing: border-box;
+}
 
 .wrapper{
     width: 50%;
