@@ -4,7 +4,9 @@
   "description": "Réseau social Groupomania",
   "main": "index.js",
   "dependencies": {
-    "vue-infinite-loading": "^2.4.5"
+    "vue-infinite-loading": "^2.4.5",
+    "vue-infinite-scroll": "^2.0.2",
+    "vue-moveable": "^1.8.9"
   },
   "devDependencies": {},
   "scripts": {

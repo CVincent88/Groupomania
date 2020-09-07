@@ -77,7 +77,6 @@ exports.deleteUser = (req, res) => {
             fs.unlink(`images/${filename}`, () => {
                 User.destroy({ where: { id: id } })
                 .then(num => {
-                    console.log(num)
                     if (num == 1) {
                         res.status(200).json({ message: "User was deleted successfully!"});
                     } else {

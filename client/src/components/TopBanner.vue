@@ -1,16 +1,19 @@
 <template>
     <div>
-        <div class="home-page">
+        <div class="container">
             <router-link to="/Home" class="profile-link">
                 <img src="../assets/icon.svg" :alt="$store.state.images.logo">
             </router-link>
-            <div class="search-bar">
+            <div class="search-bar" >
                 <input type="text" placeholder="Rechercher">
             </div>
 
             <router-link to="/AccountSetting" class="profile-link">Mon profil</router-link>
 
-            <router-link @click="logout" to="/" >Déconnexion</router-link>
+            <div @click="logout">
+                <router-link  to="/" >Déconnexion</router-link>
+            </div>
+            
         </div>
     </div>
 </template>
@@ -24,7 +27,7 @@ export default {
         //     this.$store.dispatch('logout');
         // }
         logout() {
-            window.localStorage.clear();
+            localStorage.clear();
         }
     }
 }
@@ -48,7 +51,7 @@ export default {
     }
 }
 
-.home-page {
+.container {
     width: 100%;
     height: 42px;
     background-color: rgb(40, 108, 209);

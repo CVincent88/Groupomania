@@ -12,17 +12,12 @@ const URL = 'http://localhost:5000/api/v1/posts/'
             try{
                 const res = axios.get(URL);
                 const datas = res;
-                // let allPosts = res.then((post) => {
-                //     return post.data
-                // });
-
                 resolve(
                     datas.then((post) => {
                         let allPosts = post.data;
                         let response = allPosts.map(post => ({
                             ...post
                         }))
-                        console.log(response)
                         return response
                     })
                 );

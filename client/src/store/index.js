@@ -39,8 +39,6 @@ actions: {
                     password: options.password
                 })
                 .then((response) => {
-                    console.log(`User connection info: `);
-                    console.log(response);
                     localStorage.setItem("token", response.data.token);
                     localStorage.setItem("userId", response.data.userId);
                     commit(LOGIN_SUCCESS);

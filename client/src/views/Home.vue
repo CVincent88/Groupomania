@@ -1,26 +1,24 @@
 <template>
-    <div class="home">
-        <TopBanner/>
-        <div class="wrapper">
-            <CreatePost />
-            <div class="post-thread">
-                <p class="error" v-if="error">{{ error }}</p>
-                <div class="post-model" v-for="(post) in posts" :item="post" :key="post.id">
-                    <SinglePost :post="post" />
-                </div>
-                
-                
-            </div>
+<div class="home">
+    <TopBanner class="topBanner"/>
+    <div class="wrapper" id="app">
+        <CreatePost />
+        <div class="list-group-wrapper">
+            <ul class="list-group" id="infinite-list"> <!-- id utilisé par la méthode de SinglePost -->
+                <SinglePost />
+            </ul>
         </div>
     </div>
+</div>
 </template>
+
 
 <script>
 // @ is an alias to /src
 import TopBanner from '@/components/TopBanner.vue'
 import SinglePost from '@/components/posts/SinglePost.vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
-import postService from '@/postService.js'
+// import postService from '@/postService.js'
 // import axios from 'axios'
 
 export default {
@@ -29,20 +27,6 @@ export default {
         TopBanner,
         SinglePost,
         CreatePost
-    },
-    data() {
-        return {
-            posts: [],
-            error: '',
-            text: ''
-        }   
-    },
-    async created() {
-        try{
-            this.posts = await postService.getPosts()
-        }catch(err){
-            this.error = err.message;
-        }
     }
 }
 </script>
@@ -50,29 +34,36 @@ export default {
 
 <style lang="scss" scoped>
 
-*{
-    box-sizing: border-box;
-}
-
-.wrapper{
-    width: 50%;
-    margin: 10px auto;
+.wrapper {
     display: flex;
-    flex-direction: column;
-
-    & .post-thread{
-        padding: 10px;
-
-        & .post-model{
-            display: flex;
-            flex-direction: column;
-            margin: 20px 8px;
-            padding: 10px;
-            background-color: #eff8fd;
-            border-radius: 10px 10px;
-            box-shadow: 2px 2px 10px rgba(195, 209, 216, .7);
-        }
-    }
+    flex-flow: row wrap;
+    border: 1px solid black;
+    width: 95%;
+    margin: 20px auto;
+    justify-content: space-around;
 }
+
+.test{
+    height: 200px;
+    width: 200px;
+}
+
+.wrapper > * {
+    flex-basis: 400px;
+    flex-grow: 1;
+}
+
+.list-group-wrapper {
+    position: relative;
+}
+.list-group {
+    overflow: auto;
+    height: 75vh;
+    border: 2px solid #dce4ec;
+    border-radius: 5px;
+    padding: 10px 10px;
+}
+
+
 
 </style>

@@ -15,9 +15,12 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-*{
-    box-sizing: border-box;
+<style lang="scss" >
+
+html, body {
+  margin: 0px !important;
+  padding: 0px !important;
+  box-sizing: border-box;
 }
 
 body{

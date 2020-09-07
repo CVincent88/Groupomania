@@ -98,8 +98,7 @@ export default {
                     firstName: this.userObjectSignup.firstName,
                     lastName: this.userObjectSignup.lastName,
                 })
-                .then((response) => {
-                    console.log(response);
+                .then(() => {
                     this.login(this.userObjectSignup.emailAddress, this.userObjectSignup.password2)
                 })
             }

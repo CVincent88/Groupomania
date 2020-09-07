@@ -1,6 +1,7 @@
 const models = require('../models');
 const Post = models.post;
 const jwt = require('jsonwebtoken');
+const Sequelize = require('sequelize')
 
 // Create and Save a new post.
 exports.createPost = (req, res) => {
@@ -27,12 +28,9 @@ exports.createPost = (req, res) => {
 
 // Retrieve all posts from the database. (Sends them in descending order, last created first)
 exports.findAllPosts = (req, res) => {
-    Post.findAll({include: 'author', order: [
-        ['createdAt', 'DESC']
-    ]})
+    Post.findAll({include: 'author', order: Sequelize.literal('rand()'), limit: 1})
     .then(posts => {
         res.status(200).json(posts);
-        console.log(posts)
     })
     .catch(err => {
         res.status(500).send({ message: err.message || "Some error occurred while retrieving posts." });

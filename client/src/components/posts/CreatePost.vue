@@ -1,6 +1,6 @@
 <template>
 <div class="post-creator">
-    <input type="text" name="post" id="post" placeholder="Que souaitez-vous publier ?" v-model="content">
+    <textarea type="text" name="post" id="post" placeholder="Que souaitez-vous publier ?" v-model="content"></textarea>
     <button @click="createPost">Publier</button>
 </div>
 </template>
@@ -26,8 +26,13 @@ export default {
                 content: this.content
             })
             .then((response) => {
-                console.log(response);
+                console.log(response)
+                this.eraseText();
+
             })
+        },
+        eraseText() {
+            document.getElementById("post").value = "";
         }
     }
 }
@@ -44,10 +49,18 @@ export default {
     border-radius: 10px 10px;
     box-shadow: 2px 2px 10px rgba(195, 209, 216, .7);
     align-items: center;
+    justify-content: center;
+    overflow: hidden;
 
-    & input{
-        width: 70%;
-        height: 50px;
+    & textarea{
+        width: 95%;
+        height: 200px;
+        border-radius: 10px 10px;
+        border: none;
+        padding: 10px 10px;
+        max-width: 99%;
+        min-width: 95%;
+
         &:focus{
             outline: 1px solid #347BE7;
         }
@@ -59,7 +72,8 @@ export default {
         border-radius: 4px 4px;
         outline: 0;
         background-color: #347BE7;
-        width: 70%;
+        min-width: 95%;
+        height: 50px;
         cursor: pointer;
 
     }
