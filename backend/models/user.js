@@ -32,7 +32,7 @@ module.exports = (sequelize, Sequelize) => {
         },
     });
     User.associate = function(models) {
-        User.hasMany(models.post, {foreignKey: {name: 'authorId'}, onDelete: "cascade", as: 'publications'})
+        User.hasMany(models.post, {foreignKey: {name: 'authorId'}, onDelete: 'CASCADE', onUpdate: 'CASCADE', hooks: true, as: 'publications'})
     };
 
     return User;

@@ -19,7 +19,7 @@
 
             <div class="editButtons">
                 <button class="modifyBiography">Modifier ma biographie</button>
-                <button class="deleteAccount">Supprimer mon compte</button>
+                <button class="deleteAccount" @click="deleteAccount">Supprimer mon compte</button>
             </div>
         </div>
 
@@ -28,12 +28,27 @@
 
 <script>
 import TopBanner from '../components/TopBanner.vue'
+import axios from 'axios'
 
 export default {
     name: 'AccountSetting',
     components: {
         TopBanner
     },
+    methods: {
+        deleteAccount() {
+            axios.delete(this.$store.state.URL + 'users/' + localStorage.getItem('userId'), {
+                headers: {
+                    'Authorization': this.$store.state.token
+                }
+            })
+            .then((response) => {
+                console.log(response)
+                localStorage.clear();
+                this.$router.push('/');
+            })
+        }
+    }
 }
 </script>
 

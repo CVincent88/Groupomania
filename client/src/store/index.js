@@ -16,7 +16,8 @@ state: {
     images: {
         logo: "Logo Groupomania"
     },
-    token: `Bearer ${localStorage.getItem('token')}`
+    token: `Bearer ${localStorage.getItem('token')}`,
+    URL: 'http://localhost:5000/api/v1/'
 },
 mutations: {
     [LOGIN] (state) {

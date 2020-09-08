@@ -14,14 +14,13 @@ export default {
     name: 'CreatePost',
     data() {
         return {
-            URL: 'http://localhost:5000/api/v1/posts/',
             content: '',
             userId: localStorage.getItem('userId')
         }
     },
     methods: {
         createPost() {
-            axios.post(this.URL, {
+            axios.post(this.$store.state.URL + 'posts/', {
                 authorId: this.userId,
                 content: this.content,
             },

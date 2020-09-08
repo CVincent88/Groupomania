@@ -30,8 +30,6 @@
 import axios from 'axios'
 import InfiniteLoading from 'vue-infinite-loading'
 
-const api = 'http://localhost:5000/api/v1/posts/';
-
 
 export default {
     name: 'SinglePost',
@@ -51,7 +49,7 @@ export default {
     },
     methods: {
         infiniteHandler($state) {
-            axios.get(api, {
+            axios.get(this.$store.state.URL + 'posts/', {
                 headers: {
                     'Authorization': this.$store.state.token
                 }
