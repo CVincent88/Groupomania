@@ -5,7 +5,7 @@ const auth = require('../middlewares/auth');
 const posts = require("../controllers/post");
 
 // Get all posts
-router.get("/", posts.findAllPosts);
+router.get("/", auth, posts.findAllPosts);
 
 // Get one post
 router.get("/:id", auth, posts.findOne);
@@ -14,7 +14,7 @@ router.get("/:id", auth, posts.findOne);
 router.get("/:id/author", auth, posts.findUserByPost);
 
 // Create a new post
-router.post("/", multer, posts.createPost);
+router.post("/", auth, multer, posts.createPost);
 
 // Like or dislike a post
 // router.post("/:id/like", auth, multer, posts.opinionOnPost);

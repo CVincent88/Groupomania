@@ -23,7 +23,12 @@ export default {
         createPost() {
             axios.post(this.URL, {
                 authorId: this.userId,
-                content: this.content
+                content: this.content,
+            },
+            {
+                headers: {
+                    'Authorization': this.$store.state.token
+                }
             })
             .then((response) => {
                 console.log(response)

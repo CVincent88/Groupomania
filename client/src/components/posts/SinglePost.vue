@@ -46,14 +46,15 @@ export default {
             posts: [],
             alreadyPosted: [],
             error: '',
-            loading: false,
-            maxPostNumber: 1
+            loading: false
         }   
     },
     methods: {
         infiniteHandler($state) {
             axios.get(api, {
-                // Add parameters here if necessary
+                headers: {
+                    'Authorization': this.$store.state.token
+                }
             })
             // The following code will display the post only if it has not already been displayed.
             .then(({ data }) => {
@@ -62,8 +63,13 @@ export default {
                 // Will check if the post id is already in the alreadyPosted array
                 const foundInPosted = this.alreadyPosted.find(element => element.id === data[0].id);
 
+                // If the database is empty
+                if (data.length < 1){
+                    $state.complete();
+                }
+
                 // If it has not been displayed yet
-                if (!foundInPosts) {
+                else if (!foundInPosts) {
                     this.posts.push(...data);
                     $state.loaded();
 

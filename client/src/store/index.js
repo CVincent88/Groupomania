@@ -15,7 +15,8 @@ state: {
     AccountSettingLink: "/AccountSetting",
     images: {
         logo: "Logo Groupomania"
-    }
+    },
+    token: `Bearer ${localStorage.getItem('token')}`
 },
 mutations: {
     [LOGIN] (state) {
@@ -51,7 +52,6 @@ actions: {
         }
     },
     logout({ commit }) {
-        // localStorage.removeItem("token");
         localStorage.clear();
         commit(LOGOUT);
     }

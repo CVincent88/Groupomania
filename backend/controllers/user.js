@@ -54,13 +54,13 @@ exports.login = function(req, res) {
                             })
                         })
                         .catch(err => {
-                            res.status(500).json({ error: 'ici' })
+                            res.status(500).json({ error: err })
                         });    
                 }
     
             })
             .catch(err => {
-                res.status(500).json({ error: 'là'})
+                res.status(500).json({ error: err})
             });
     }
 }
