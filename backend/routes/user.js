@@ -10,6 +10,9 @@ router.post("/signup", multer, users.signup);
 // Login to user account
 router.post("/login", multer, users.login);
 
+// Get user info
+router.get("/:id", multer, users.findUser);
+
 // Delete user account
 router.delete("/:id", auth, multer, users.deleteUser);
 

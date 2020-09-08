@@ -4,8 +4,8 @@
     <div class="wrapper" id="app">
         <CreatePost />
         <div class="list-group-wrapper">
-            <ul class="list-group" id="infinite-list"> <!-- id utilisé par la méthode de SinglePost -->
-                <SinglePost />
+            <ul class="list-group" id="infinite-list"> <!-- id utilisé par la méthode de PostThread -->
+                <PostThread />
             </ul>
         </div>
     </div>
@@ -16,7 +16,7 @@
 <script>
 // @ is an alias to /src
 import TopBanner from '@/components/TopBanner.vue'
-import SinglePost from '@/components/posts/SinglePost.vue'
+import PostThread from '@/components/posts/PostThread.vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
 // import postService from '@/postService.js'
 // import axios from 'axios'
@@ -25,7 +25,7 @@ export default {
     name: 'Home',
     components: {
         TopBanner,
-        SinglePost,
+        PostThread,
         CreatePost
     }
 }

@@ -32,7 +32,7 @@ import InfiniteLoading from 'vue-infinite-loading'
 
 
 export default {
-    name: 'SinglePost',
+    name: 'PostThread',
     props: {
         post: Object
     },

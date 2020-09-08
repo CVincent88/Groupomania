@@ -29,10 +29,8 @@ export default {
                     'Authorization': this.$store.state.token
                 }
             })
-            .then((response) => {
-                console.log(response)
+            .then(() => {
                 this.eraseText();
-
             })
         },
         eraseText() {

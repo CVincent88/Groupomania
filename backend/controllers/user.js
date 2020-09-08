@@ -65,6 +65,19 @@ exports.login = function(req, res) {
     }
 }
 
+// Find all posts of a specific user.
+exports.findUser = (req, res) => {
+    const id = req.params.id;
+
+    User.findByPk(id)
+    .then((user) => {
+        res.send(user)
+    })
+    .catch((err) => {
+    console.log("Error while find company : ", err)
+    })
+};
+
 // Delete user account.
 exports.deleteUser = (req, res) => {
     const id = req.params.id;

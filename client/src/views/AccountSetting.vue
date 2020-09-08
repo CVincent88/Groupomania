@@ -5,22 +5,28 @@
             <h1>Mon profil</h1>
             <div class="profile">
                 <div class="profile_picture">
-                <img src="../../public/images/default_profile_picture.jpg" alt="Profile picture">
-                <button class="modifyProfilePicture">Modifier</button>
+                    <img src="../../public/images/default_profile_picture.jpg" alt="Profile picture">
+                    <button class="modifyProfilePicture">Modifier</button>
                 </div>
 
                 <div class="biography">
-                <p class="aboutMe">À propos de moi: </p>
-                <div class="biography_text">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui, alias at optio nulla beatae, labore, recusandae ex temporibus laboriosam iusto repellendus aspernatur eius aut architecto facilis ipsum ut quasi corporis nemo delectus libero dolor praesentium. Voluptates ipsa dolorem deleniti tempora voluptatem quas vero eaque cum repellendus exercitationem. Impedit, unde quia.</p>
+                    <p class="aboutMe">À propos de moi: </p>
+                    <div class="biography_text">
+                        <p>{{ registeredBiography }}</p>
+                    </div>
                 </div>
-                </div>
-            </div>
 
-            <div class="editButtons">
-                <button class="modifyBiography">Modifier ma biographie</button>
-                <button class="deleteAccount" @click="deleteAccount">Supprimer mon compte</button>
+                <div class="editButtons">
+                    <button class="modifyBiography" @click="openModifyBiography">Modifier ma biographie</button>
+                    <button class="deleteAccount" @click="deleteAccount">Supprimer mon compte</button>
+                </div>
+
+                <div v-show="modifyBiography">
+                    <textarea id="biographyTextBox" name="Biography" cols="30" rows="10" v-model="newBiography"></textarea>
+                    <button @click="submitBiography">Soumettre</button>
+                </div>
             </div>
+            
         </div>
 
     </div>
@@ -32,6 +38,13 @@ import axios from 'axios'
 
 export default {
     name: 'AccountSetting',
+    data() {
+        return {
+            modifyBiography: false,
+            newBiography: '',
+            registeredBiography: '',
+        }
+    },
     components: {
         TopBanner
     },
@@ -42,12 +55,39 @@ export default {
                     'Authorization': this.$store.state.token
                 }
             })
-            .then((response) => {
-                console.log(response)
+            .then(() => {
                 localStorage.clear();
                 this.$router.push('/');
             })
+        },
+        submitBiography() {
+            axios.put(this.$store.state.URL + 'users/' + localStorage.getItem('userId'), {
+                biography: this.newBiography  
+            },
+            {
+                headers: {
+                    'Authorization': this.$store.state.token
+                }
+            })
+            .then((response) => {
+                console.log(response);
+                this.modifyBiography = false;
+            })
+        },
+            openModifyBiography() {
+            this.modifyBiography = true
         }
+    },
+    beforeMount() {
+        axios.get(this.$store.state.URL + 'users/' + localStorage.getItem('userId'), {
+            headers: {
+                'Authorization': this.$store.state.token
+            },
+        })
+        .then((response) => {
+            this.registeredBiography = response.data.biography
+            console.log(response)
+        })
     }
 }
 </script>
