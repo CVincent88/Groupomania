@@ -19,7 +19,8 @@ module.exports = (sequelize, Sequelize) => {
         },
         biography: {
             type: Sequelize.TEXT,
-            allowNull: true
+            allowNull: true,
+            defaultValue: 'Parlez un peu de vous !'
         },
         profileImage: {
             type: Sequelize.STRING,

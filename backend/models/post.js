@@ -23,7 +23,7 @@ module.exports = (sequelize, Sequelize) => {
         },
     });
     Post.associate = function(models) {
-        Post.belongsTo(models.user, {foreignKey: 'authorId', as: 'author'})
+        Post.belongsTo(models.user, {foreignKey: 'authorId', hooks: true, as: 'author'})
     };
     return Post;
 };

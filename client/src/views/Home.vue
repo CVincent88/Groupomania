@@ -2,7 +2,12 @@
 <div class="home">
     <TopBanner class="topBanner"/>
     <div class="wrapper" id="app">
-        <CreatePost />
+        <div>
+            <div class="me">
+            {{ myName }}
+            </div>
+            <CreatePost />
+        </div>
         <div class="list-group-wrapper">
             <ul class="list-group" id="infinite-list"> <!-- id utilisé par la méthode de PostThread -->
                 <PostThread />
@@ -18,8 +23,7 @@
 import TopBanner from '@/components/TopBanner.vue'
 import PostThread from '@/components/posts/PostThread.vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
-// import postService from '@/postService.js'
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
     name: 'Home',
@@ -27,6 +31,21 @@ export default {
         TopBanner,
         PostThread,
         CreatePost
+    },
+    data() {
+        return {
+            myName: ''
+        }
+    },
+    beforeMount() {
+        axios.get(this.$store.state.URL + 'users/' + localStorage.getItem('myUserId'), {
+            headers: {
+                'Authorization': this.$store.state.token
+            },
+        })
+        .then((res) => {
+            this.myName = res.data.firstName + ' ' + res.data.lastName
+        })
     }
 }
 </script>

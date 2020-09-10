@@ -12,9 +12,9 @@ const LOGOUT = "LOGOUT";
 export default new Vuex.Store({
 state: {
     homelink: "/",
-    AccountSettingLink: "/AccountSetting",
+    ProfilePageLink: "/ProfilePage",
     images: {
-        logo: "Logo Groupomania"
+        logo: "Logo Grouposcape"
     },
     token: `Bearer ${localStorage.getItem('token')}`,
     URL: 'http://localhost:5000/api/v1/'
@@ -41,8 +41,9 @@ actions: {
                     password: options.password
                 })
                 .then((response) => {
-                    localStorage.setItem("token", response.data.token);
-                    localStorage.setItem("userId", response.data.userId);
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('myUserId', response.data.userId);
+                    localStorage.setItem('isAdmin', response.data.user.isAdmin);
                     commit(LOGIN_SUCCESS);
                     resolve();
                 })

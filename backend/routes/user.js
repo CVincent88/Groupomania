@@ -5,21 +5,21 @@ const auth = require('../middlewares/auth');
 const users = require("../controllers/user");
 
 // Create a new user
-router.post("/signup", multer, users.signup);
+router.post("/signup", users.signup);
 
 // Login to user account
-router.post("/login", multer, users.login);
+router.post("/login", users.login);
 
 // Get user info
-router.get("/:id", multer, users.findUser);
+router.get("/:id", auth, users.findUser);
 
 // Delete user account
-router.delete("/:id", auth, multer, users.deleteUser);
+router.delete("/:id", auth, users.deleteUser);
 
 // Update user account
-router.put("/:id", auth, multer, users.updateUser);
+router.put("/:id", auth, users.updateUser);
 
 // Find all posts of a specific user
-router.get("/:id/posts", auth, multer, users.findPostsByUser);
+router.get("/:id/posts", auth, users.findPostsByUser);
 
 module.exports = router;

@@ -50,7 +50,8 @@ exports.login = function(req, res) {
                                     process.env.JWT_KEY,
                                     { expiresIn: '60m'}
                                 ),
-                                userId: user.id
+                                userId: user.id,
+                                user: user
                             })
                         })
                         .catch(err => {
@@ -125,7 +126,7 @@ exports.updateUser = (req, res) => {
 
     // Création d'un nouvel objet. Si pas d'image, alors on envoie req.body, si une image, on la nomme accordingly.
     const userObject = req.file ?
-        {
+        {   
             ...req.body,
             profileImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };

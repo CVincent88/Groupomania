@@ -4,7 +4,13 @@
 
         <div class="user">
             <img class="profile-picture" src="../../../public/images/default_profile_picture.jpg" alt="Default profile picture">
-            <span class="user_username">{{ `${post.author.firstName} ${post.author.lastName}` }}</span>
+            <router-link :to="{
+                name: 'ProfilePage', 
+                params: { profileToLoad: JSON.stringify(post.author.id) }
+            }" 
+                class="profile-link">
+                {{ `${post.author.firstName} ${post.author.lastName}` }}
+            </router-link>
         </div>
         <div class="post-content-box">
             <p class="post-content">{{ post.content }}</p>
@@ -44,7 +50,8 @@ export default {
             posts: [],
             alreadyPosted: [],
             error: '',
-            loading: false
+            loading: false,
+            profileToLoad: 0
         }   
     },
     methods: {
@@ -70,6 +77,7 @@ export default {
                 else if (!foundInPosts) {
                     this.posts.push(...data);
                     $state.loaded();
+                    this.profileToLoad = JSON.stringify(data[0].author.id)
 
                 // If if has been displayed but not registered in the alreadyPosted array
                 }else if(foundInPosts && !foundInPosted){
@@ -127,6 +135,16 @@ export default {
     display: flex;
     align-items: center;
     text-align: start;
+
+    & .profile-link{
+        text-decoration: none;
+        padding-left: 5px;
+        color: black;
+
+        &:hover{
+            color: blue;
+        }
+    }
 
     & .profile-picture{
         width: 30px;

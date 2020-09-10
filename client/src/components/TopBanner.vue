@@ -8,7 +8,7 @@
                 <input type="text" placeholder="Rechercher">
             </div>
 
-            <router-link to="/AccountSetting" class="profile-link">Mon profil</router-link>
+            <router-link :to="{ name: 'ProfilePage', params: { profileToLoad } }" class="profile-link">Mon profil</router-link>
 
             <div @click="logout">
                 <router-link  to="/" >Déconnexion</router-link>
@@ -22,10 +22,13 @@
 
 export default {
     name: 'TopBanner',
+    data() {
+        return {
+            profileToLoad: localStorage.getItem('myUserId'),
+            userName: ''
+        }
+    },
     methods: {
-        // logout() {
-        //     this.$store.dispatch('logout');
-        // }
         logout() {
             localStorage.clear();
         }
