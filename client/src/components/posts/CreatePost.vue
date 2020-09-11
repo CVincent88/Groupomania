@@ -29,8 +29,19 @@ export default {
                     'Authorization': this.$store.state.token
                 }
             })
-            .then(() => {
+            .then((res) => {
                 this.eraseText();
+                if (res.status === 200) {
+                    axios.get(this.$store.state.URL + 'posts/latest', {
+                        headers: {
+                            'Authorization': this.$store.state.token
+                        }
+                    })
+                    .then((res) => {
+                        this.$store.state.posts.unshift(...res.data)
+                        console.log(this.$store.state.posts)
+                    })
+                }
             })
         },
         eraseText() {

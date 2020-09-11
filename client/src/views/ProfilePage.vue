@@ -161,8 +161,8 @@ export default {
                 },
             })
             .then((response) => {
-                this.posts.push(...response.data.publications);
-                console.log(this.posts)
+                this.$store.state.posts.push(...response.data.publications);
+                console.log(this.$store.state.posts)
             })
         }
     },

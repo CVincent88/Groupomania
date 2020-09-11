@@ -1,6 +1,6 @@
 <template>
 <div>
-    <li class="single-post" v-for="post in posts" :key="post.id">
+    <li class="single-post" v-for="post in this.$store.state.posts" :key="post.id">
 
         <div class="user">
             <img class="profile-picture" src="../../../public/images/default_profile_picture.jpg" alt="Default profile picture">
@@ -47,7 +47,6 @@ export default {
     },
         data() {
         return {
-            posts: [],
             alreadyPosted: [],
             error: '',
             loading: false,
@@ -63,8 +62,9 @@ export default {
             })
             // The following code will display the post only if it has not already been displayed.
             .then(({ data }) => {
+                console.log(data)
                 // Will check if the post id is already in the posts array
-                const foundInPosts = this.posts.find(element => element.id === data[0].id);
+                const foundInPosts = this.$store.state.posts.find(element => element.id === data[0].id);
                 // Will check if the post id is already in the alreadyPosted array
                 const foundInPosted = this.alreadyPosted.find(element => element.id === data[0].id);
 
@@ -75,7 +75,7 @@ export default {
 
                 // If it has not been displayed yet
                 else if (!foundInPosts) {
-                    this.posts.push(...data);
+                    this.$store.state.posts.push(...data);
                     $state.loaded();
                     this.profileToLoad = JSON.stringify(data[0].author.id)
 
@@ -87,7 +87,7 @@ export default {
                 // If it has been displayed and registered in the alreadyPosted array
                 }else if(foundInPosts && foundInPosted){
                     // If we have not displayed every post yet
-                    if(this.alreadyPosted.length < this.posts.length){
+                    if(this.alreadyPosted.length < this.$store.state.posts.length){
                         $state.loaded();
                     // If we have displayed every post
                     }else{

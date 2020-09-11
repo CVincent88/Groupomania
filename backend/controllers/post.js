@@ -37,6 +37,17 @@ exports.findAllPosts = (req, res) => {
     });
 };
 
+// Retrieve latest post from the database.
+exports.findLatestPost = (req, res) => {
+    Post.findAll({include: 'author', order: [ [ 'createdAt', 'DESC' ]], limit: 1})
+    .then(posts => {
+        res.status(200).json(posts);
+    })
+    .catch(err => {
+        res.status(500).send({ message: err.message || "Some error occurred while retrieving posts." });
+    });
+};
+
 // Retrieve one post from the database.
 exports.findOne = (req, res) => {
     const postId = req.params.id;

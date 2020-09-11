@@ -7,6 +7,9 @@ const posts = require("../controllers/post");
 // Get all posts
 router.get("/", auth, posts.findAllPosts);
 
+// Get latest post
+router.get("/latest", auth, posts.findLatestPost);
+
 // Get one post
 router.get("/:id", auth, posts.findOne);
 

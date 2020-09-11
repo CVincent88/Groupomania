@@ -17,7 +17,8 @@ state: {
         logo: "Logo Grouposcape"
     },
     token: `Bearer ${localStorage.getItem('token')}`,
-    URL: 'http://localhost:5000/api/v1/'
+    URL: 'http://localhost:5000/api/v1/',
+    posts: []
 },
 mutations: {
     [LOGIN] (state) {
