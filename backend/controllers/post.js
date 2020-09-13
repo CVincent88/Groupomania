@@ -1,7 +1,8 @@
 const models = require('../models');
 const Post = models.post;
 const jwt = require('jsonwebtoken');
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
+const like = require('../models/like');
 
 // Create and Save a new post.
 exports.createPost = (req, res) => {
@@ -10,8 +11,6 @@ exports.createPost = (req, res) => {
         res.status(400).send({ message: "Content can not be empty!" });
         return;
     }
-
-    // Create a Tutorial
     const newPost = {
         ...req.body
     };
@@ -28,7 +27,9 @@ exports.createPost = (req, res) => {
 
 // Retrieve all posts from the database. (Sends them in descending order, last created first)
 exports.findAllPosts = (req, res) => {
-    Post.findAll({include: 'author', order: Sequelize.literal('rand()'), limit: 1})
+    Post.findAll(
+        {include: [{all:true}],
+        order: Sequelize.literal('rand()'), limit: 1})
     .then(posts => {
         res.status(200).json(posts);
     })
@@ -50,7 +51,7 @@ exports.findLatestPost = (req, res) => {
 
 // Retrieve one post from the database.
 exports.findOne = (req, res) => {
-    const postId = req.params.id;
+    const postId = req.body.id;
 
     Post.findByPk(postId)
         .then(post => {
@@ -105,8 +106,8 @@ exports.deletePost = (req, res) => {
             // We make sure that the author of the post is the one trying to delete it
             if(userId === post.authorId){
                 Post.destroy({ where : {id: postId}})
-                    .then(num => {
-                        if (num == 1) {
+                    .then(rowDeleted => {  
+                        if (rowDeleted == 1) {
                             res.status(200).json({ message: "Post was deleted successfully!"});
                         } else {
                             res.send({ message: `Cannot delete post with id=${postId}. Maybe the post was not found!`});

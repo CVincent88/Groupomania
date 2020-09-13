@@ -11,7 +11,7 @@ router.post("/signup", users.signup);
 router.post("/login", users.login);
 
 // Get user info
-router.get("/:id", auth, users.findUser);
+router.get("/:id", multer, users.findUser);
 
 // Delete user account
 router.delete("/:id", auth, users.deleteUser);

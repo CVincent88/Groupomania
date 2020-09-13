@@ -1,7 +1,10 @@
 <template>
 <div>
-    <li class="single-post" v-for="post in this.$store.state.posts" :key="post.id">
-
+    <li class="single-post" v-for="(post, index) in this.$store.state.posts"
+        :key="post.id"
+        :ref="`post${index}`"
+        :index="index+1">
+        <p>{{ index }}</p>
         <div class="user">
             <img class="profile-picture" src="../../../public/images/default_profile_picture.jpg" alt="Default profile picture">
             <router-link :to="{
@@ -17,13 +20,12 @@
         </div>
         <div class="users-reactions">
             <div class="likes">
-                <button class="like-button reaction-button">J'aime</button>
-                <span class="like-number reaction-number">{{ post.like }}1</span>
+                <button @click="reactOnPost(post, 1)" ref="{{`${post.id}`}}">J'aime</button>
+                <span class="like-number reaction-number">{{ post.like }}</span>
             </div>
-            <span>|</span>
             <div class="dislikes">
-                <button class="dislike-button reaction-button">Je n'aime pas</button>
-                <span class="dislike-number reaction-number">{{ post.dislike }}1</span>
+                <button @click="reactOnPost(post, 0)">Je n'aime pas</button>
+                <span class="dislike-number reaction-number">{{ post.dislike }}</span>
             </div>
         </div>
     </li>
@@ -50,10 +52,73 @@ export default {
             alreadyPosted: [],
             error: '',
             loading: false,
-            profileToLoad: 0
+            profileToLoad: 0,
+            userId: localStorage.getItem('myUserId')
         }   
     },
+
     methods: {
+        // doILike(post){
+        //     const userId = this.userId;
+
+        //     if(post.reactions.length > 0){
+        //         for(let i=0; i<post.reactions.length; i++){
+        //             if(post.reactions[i].authorId == userId && post.reactions[i].reaction == 1){
+        //                 return true
+        //             }else{
+        //                 return false
+        //             }
+        //         }
+        //     }else{
+        //         return false
+        //     }
+        // },
+        // doIDislike(post){
+        //     const userId = this.userId;
+
+        //     if(post.reactions.length > 0){
+        //         for(let i=0; i<post.reactions.length; i++){
+        //             if(post.reactions[i].authorId == userId && post.reactions[i].reaction == 0){
+        //                 return true
+        //             }else{
+        //                 return false
+        //             }
+        //         }
+        //     }else{
+        //         return false
+        //     }
+        // },
+
+        // Displays likes and dislikes
+        showReactions(data) {
+            const reactions = data[0].reactions;
+
+            for (let i=0; i<reactions.length; i++){
+
+                if(reactions[i].reaction === 0){
+                    data[0].dislike += 1;
+                    // Determine si le post est disliké par l'utilisateur
+                    if(data[0].reactions[i].authorId == this.userId){
+                        // Modifier style du bouton DISLIKE
+                        console.log('Tu dislike le post')
+                    }else{
+                        // Style normal
+                    }
+
+                }else if(reactions[i].reaction === 1){
+                    data[0].like += 1;
+                    // Determine si le post est liké par l'utilisateur
+                    if(data[0].reactions[i].authorId == this.userId){
+                        // Modifier style du bouton LIKE
+                        console.log('Tu like le post')
+                    }else{
+                        // Style normal
+                    }
+                }
+            }
+        },
+
+        // Infinite scroll
         infiniteHandler($state) {
             axios.get(this.$store.state.URL + 'posts/', {
                 headers: {
@@ -62,7 +127,6 @@ export default {
             })
             // The following code will display the post only if it has not already been displayed.
             .then(({ data }) => {
-                console.log(data)
                 // Will check if the post id is already in the posts array
                 const foundInPosts = this.$store.state.posts.find(element => element.id === data[0].id);
                 // Will check if the post id is already in the alreadyPosted array
@@ -75,9 +139,14 @@ export default {
 
                 // If it has not been displayed yet
                 else if (!foundInPosts) {
+                    // Répartition des likes et dislikes
+                    this.showReactions(data)
+
                     this.$store.state.posts.push(...data);
                     $state.loaded();
-                    this.profileToLoad = JSON.stringify(data[0].author.id)
+                    console.log(this.$store.state.posts)
+                    // Save the userId to load the correct profilePage
+                    // this.profileToLoad = JSON.stringify(data[0].author.id)
 
                 // If if has been displayed but not registered in the alreadyPosted array
                 }else if(foundInPosts && !foundInPosted){
@@ -95,7 +164,89 @@ export default {
                     }
                 }
             });
+        },
+
+        // Like or dilike a post
+        reactOnPost(post, reaction) {
+            if(reaction == 1){
+                if(this.doILike(post) == false){
+                    axios.post(this.$store.state.URL + 'likes/', {
+                        reaction: reaction,
+                        authorId: this.userId,
+                        postId: post.id
+                    },
+                    {
+                        headers: {
+                            'Authorization': this.$store.state.token
+                        }
+                    })
+                    .then((res) => {
+                        console.log(res)
+                        this.$refs[`${post.id}`].addClass('activated-button')
+                    })
+                }else if(this.doILike(post) == true){
+                    let id = Number;
+
+                    for(let i=0; i<post.reactions.length; i++){
+                        if(this.userId == post.reactions[i].authorId){
+                            id = post.reactions[i].id
+                        }
+                    }
+                    axios.delete(this.$store.state.URL + 'likes/', {
+                        params: {
+                            'id': id
+                        }
+                    },
+                    {
+                        headers: {
+                            'Authorization': this.$store.state.token,
+                        }
+                    })
+                    .then((res) => {
+                        console.log(res)
+                    })
+                }
+            }else if(reaction == 0){
+                if(this.doIDislike(post) == false){
+                    axios.post(this.$store.state.URL + 'likes/', {
+                        reaction: reaction,
+                        authorId: this.userId,
+                        postId: post.id
+                    },
+                    {
+                        headers: {
+                            'Authorization': this.$store.state.token
+                        }
+                    })
+                    .then(() => {
+                        this.doILike(post)
+                    })
+                }else if(this.doIDislike(post) == true){
+                    let id = Number;
+
+                    for(let i=0; i<post.reactions.length; i++){
+                        if(this.userId == post.reactions[i].authorId){
+                            id = post.reactions[i].id
+                        }
+                    }
+                    axios.delete(this.$store.state.URL + 'likes/', {
+                        params: {
+                            'id': id
+                        }
+                    },
+                    {
+                        headers: {
+                            'Authorization': this.$store.state.token,
+                        }
+                    })
+                    .then(() => {
+                        this.doILike(post)
+                    })
+                }
+            }
+
         }
+    
     }
 }
 </script>
@@ -165,6 +316,10 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+
+.activated-button {
+    background-color: red;
 }
 
 </style>

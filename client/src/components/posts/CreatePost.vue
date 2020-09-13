@@ -39,7 +39,6 @@ export default {
                     })
                     .then((res) => {
                         this.$store.state.posts.unshift(...res.data)
-                        console.log(this.$store.state.posts)
                     })
                 }
             })

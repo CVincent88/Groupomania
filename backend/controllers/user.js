@@ -115,9 +115,9 @@ exports.deleteUser = (req, res) => {
                 });
         }
     })
-    // .catch(err => {
-    //     res.status(500).send({ message: "Error retrieving user with id=" + id });
-    // });
+    .catch(err => {
+        res.status(500).send({ message: "Error retrieving user with id=" + id });
+    });
 };
 
 // Modify user account.

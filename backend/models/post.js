@@ -15,7 +15,6 @@ module.exports = (sequelize, Sequelize) => {
         like: {
             type: Sequelize.INTEGER,
             allowNull: true,
-
         },
         dislike: {
             type: Sequelize.INTEGER,
@@ -24,6 +23,7 @@ module.exports = (sequelize, Sequelize) => {
     });
     Post.associate = function(models) {
         Post.belongsTo(models.user, {foreignKey: 'authorId', hooks: true, as: 'author'})
+        Post.hasMany(models.like, {foreignKey: {name: 'postId'}, onDelete: 'CASCADE', onUpdate: 'CASCADE', hooks: true, as: 'reactions'})
     };
     return Post;
 };
