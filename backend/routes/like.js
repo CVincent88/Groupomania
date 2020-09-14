@@ -4,6 +4,9 @@ const multer = require('../middlewares/multer-config')
 
 const likes = require("../controllers/like");
 
+// Find one like
+router.get("/", multer, likes.findOne);
+
 // Add reaction on post
 router.post("/", multer, likes.reactOnPost);
 

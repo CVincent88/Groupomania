@@ -2,7 +2,6 @@
 <div>
     <li class="single-post" v-for="(post, index) in this.$store.state.posts"
         :key="post.id"
-        :ref="`post${index}`"
         :index="index+1">
         <p>{{ index }}</p>
         <div class="user">
@@ -20,12 +19,12 @@
         </div>
         <div class="users-reactions">
             <div class="likes">
-                <button @click="reactOnPost(post, 1)" ref="{{`${post.id}`}}">J'aime</button>
-                <span class="like-number reaction-number">{{ post.like }}</span>
+                <button :class="doILike(post) ? 'activated-button' : 'empty'" @click="reactOnPost(post, 1)" >J'aime</button>
+                <span v-if="post.arrayOfReaction.likes.length > 0" class="like-number reaction-number">{{ post.arrayOfReaction.likes.length }}</span>
             </div>
             <div class="dislikes">
-                <button @click="reactOnPost(post, 0)">Je n'aime pas</button>
-                <span class="dislike-number reaction-number">{{ post.dislike }}</span>
+                <button :class="doIDislike(post) ? 'activated-button' : 'empty'" @click="reactOnPost(post, 0)" >Je n'aime pas</button>
+                <span v-if="post.arrayOfReaction.dislikes.length > 0" class="dislike-number reaction-number">{{ post.arrayOfReaction.dislikes.length }}</span>
             </div>
         </div>
     </li>
@@ -49,74 +48,63 @@ export default {
     },
         data() {
         return {
+            likeClass: [],
             alreadyPosted: [],
             error: '',
             loading: false,
             profileToLoad: 0,
-            userId: localStorage.getItem('myUserId')
+            userObject: JSON.parse(localStorage.getItem('userObject'))
         }   
     },
 
     methods: {
-        // doILike(post){
-        //     const userId = this.userId;
+        createArrayOfReactions(post) {
+            let reactions = {
+                likes: [],
+                dislikes: []
+            }
 
-        //     if(post.reactions.length > 0){
-        //         for(let i=0; i<post.reactions.length; i++){
-        //             if(post.reactions[i].authorId == userId && post.reactions[i].reaction == 1){
-        //                 return true
-        //             }else{
-        //                 return false
-        //             }
-        //         }
-        //     }else{
-        //         return false
-        //     }
-        // },
-        // doIDislike(post){
-        //     const userId = this.userId;
-
-        //     if(post.reactions.length > 0){
-        //         for(let i=0; i<post.reactions.length; i++){
-        //             if(post.reactions[i].authorId == userId && post.reactions[i].reaction == 0){
-        //                 return true
-        //             }else{
-        //                 return false
-        //             }
-        //         }
-        //     }else{
-        //         return false
-        //     }
-        // },
-
-        // Displays likes and dislikes
-        showReactions(data) {
-            const reactions = data[0].reactions;
-
-            for (let i=0; i<reactions.length; i++){
-
-                if(reactions[i].reaction === 0){
-                    data[0].dislike += 1;
-                    // Determine si le post est disliké par l'utilisateur
-                    if(data[0].reactions[i].authorId == this.userId){
-                        // Modifier style du bouton DISLIKE
-                        console.log('Tu dislike le post')
-                    }else{
-                        // Style normal
-                    }
-
-                }else if(reactions[i].reaction === 1){
-                    data[0].like += 1;
-                    // Determine si le post est liké par l'utilisateur
-                    if(data[0].reactions[i].authorId == this.userId){
-                        // Modifier style du bouton LIKE
-                        console.log('Tu like le post')
-                    }else{
-                        // Style normal
-                    }
+            for (let i=0; i<post.reactions.length; i++){
+                if(post.reactions[i].reaction == 1){
+                    reactions.likes.push(post.reactions[i].authorId)
+                }else if(post.reactions[i].reaction == 0){
+                    reactions.dislikes.push(post.reactions[i].authorId)
+                }else{
+                    console.log('error de condition')
                 }
             }
+
+            return reactions
         },
+        doILike(post){
+            const userId = this.userObject.id;
+
+            if(post.arrayOfReaction.likes.length > 0){
+                for(let i=0; i<post.arrayOfReaction.likes.length; i++){
+                    if(post.arrayOfReaction.likes[i] == userId){
+                        return true
+                    }
+                }
+                return false
+            }else{
+                return false
+            }
+        },
+        doIDislike(post){
+            const userId = this.userObject.id;
+
+            if(post.arrayOfReaction.dislikes.length > 0){
+                for(let i=0; i<post.arrayOfReaction.dislikes.length; i++){
+                    if(post.arrayOfReaction.dislikes[i] == userId){
+                        return true
+                    }
+                }
+                return false
+            }else{
+                return false
+            }
+        },
+
 
         // Infinite scroll
         infiniteHandler($state) {
@@ -126,31 +114,32 @@ export default {
                 }
             })
             // The following code will display the post only if it has not already been displayed.
-            .then(({ data }) => {
-                // Will check if the post id is already in the posts array
-                const foundInPosts = this.$store.state.posts.find(element => element.id === data[0].id);
-                // Will check if the post id is already in the alreadyPosted array
-                const foundInPosted = this.alreadyPosted.find(element => element.id === data[0].id);
+            .then((post) => {
+                const thisPost = post.data[0];
 
+                // Will check if the post id is already in the posts array
+                const foundInPosts = this.$store.state.posts.find(element => element.id === thisPost.id);
+                // Will check if the post id is already in the alreadyPosted array
+                const foundInPosted = this.alreadyPosted.find(element => element.id === thisPost.id);
+                
                 // If the database is empty
-                if (data.length < 1){
+                if (post.data.length < 1){
                     $state.complete();
                 }
 
                 // If it has not been displayed yet
                 else if (!foundInPosts) {
-                    // Répartition des likes et dislikes
-                    this.showReactions(data)
-
-                    this.$store.state.posts.push(...data);
+                    
+                    // On calcule le nombre de likes et dislikes
+                    thisPost.arrayOfReaction = this.createArrayOfReactions(thisPost);
+                    
+                    // On enregistre
+                    this.$store.state.posts.push(thisPost);
                     $state.loaded();
-                    console.log(this.$store.state.posts)
-                    // Save the userId to load the correct profilePage
-                    // this.profileToLoad = JSON.stringify(data[0].author.id)
 
-                // If if has been displayed but not registered in the alreadyPosted array
+                // If it has been displayed but not registered in the alreadyPosted array
                 }else if(foundInPosts && !foundInPosted){
-                    this.alreadyPosted.push(...data);
+                    this.alreadyPosted.push(thisPost);
                     $state.loaded();
 
                 // If it has been displayed and registered in the alreadyPosted array
@@ -168,49 +157,14 @@ export default {
 
         // Like or dilike a post
         reactOnPost(post, reaction) {
+            // If the user clicks on like button
             if(reaction == 1){
-                if(this.doILike(post) == false){
-                    axios.post(this.$store.state.URL + 'likes/', {
-                        reaction: reaction,
-                        authorId: this.userId,
-                        postId: post.id
-                    },
-                    {
-                        headers: {
-                            'Authorization': this.$store.state.token
-                        }
-                    })
-                    .then((res) => {
-                        console.log(res)
-                        this.$refs[`${post.id}`].addClass('activated-button')
-                    })
-                }else if(this.doILike(post) == true){
-                    let id = Number;
 
-                    for(let i=0; i<post.reactions.length; i++){
-                        if(this.userId == post.reactions[i].authorId){
-                            id = post.reactions[i].id
-                        }
-                    }
-                    axios.delete(this.$store.state.URL + 'likes/', {
-                        params: {
-                            'id': id
-                        }
-                    },
-                    {
-                        headers: {
-                            'Authorization': this.$store.state.token,
-                        }
-                    })
-                    .then((res) => {
-                        console.log(res)
-                    })
-                }
-            }else if(reaction == 0){
-                if(this.doIDislike(post) == false){
+                // If he has not already liked the post, we create a new Like entry in the database
+                if(!post.arrayOfReaction.likes.includes(this.userObject.id)){
                     axios.post(this.$store.state.URL + 'likes/', {
                         reaction: reaction,
-                        authorId: this.userId,
+                        authorId: this.userObject.id,
                         postId: post.id
                     },
                     {
@@ -219,19 +173,17 @@ export default {
                         }
                     })
                     .then(() => {
-                        this.doILike(post)
+                        console.log('Le like a été ajouté à la base de données')
+                        // This line is here so that the button highlights immediately without another XHR
+                        post.arrayOfReaction.likes.push(this.userObject.id)
                     })
-                }else if(this.doIDislike(post) == true){
-                    let id = Number;
+                }else{
 
-                    for(let i=0; i<post.reactions.length; i++){
-                        if(this.userId == post.reactions[i].authorId){
-                            id = post.reactions[i].id
-                        }
-                    }
+                    // Delete the like in the database
                     axios.delete(this.$store.state.URL + 'likes/', {
                         params: {
-                            'id': id
+                            'authorId': this.userObject.id,
+                            'postId': post.id   
                         }
                     },
                     {
@@ -240,9 +192,55 @@ export default {
                         }
                     })
                     .then(() => {
-                        this.doILike(post)
+                        console.log('Le like a été supprimé de la base de données')
+                        for(let i = 0; i < post.arrayOfReaction.likes.length; i++){ 
+                            post.arrayOfReaction.likes.splice(i, this.userObject.id)
+                        }
                     })
                 }
+
+            }else if (reaction == 0){
+
+                // If he has not already disliked the post, we create a new Dislike entry in the database
+                if(!post.arrayOfReaction.dislikes.includes(this.userObject.id)){
+                    console.log('test 1')
+                    axios.post(this.$store.state.URL + 'likes/', {
+                        reaction: reaction,
+                        authorId: this.userObject.id,
+                        postId: post.id
+                    },
+                    {
+                        headers: {
+                            'Authorization': this.$store.state.token
+                        }
+                    })
+                    .then(() => {
+                        // This line is here so that the button highlights immediately without another XHR
+                        post.arrayOfReaction.dislikes.push(this.userObject.id)
+
+                    })
+                }else{
+
+                    // Delete the like in the database
+                    axios.delete(this.$store.state.URL + 'likes/', {
+                        params: {
+                            'authorId': this.userObject.id,
+                            'postId': post.id   
+                        }
+                    },
+                    {
+                        headers: {
+                            'Authorization': this.$store.state.token,
+                        }
+                    })
+                    .then(() => {
+                        // This code is here so that the button highlights immediately without another XHR
+                        for(let i = 0; i < post.arrayOfReaction.dislikes.length; i++){ 
+                            post.arrayOfReaction.dislikes.splice(i, this.userObject.id)
+                        }
+                    })
+                }
+
             }
 
         }

@@ -84,7 +84,9 @@ export default {
                 password: password,
                 URL: this.URL
             })
-            .then(() => {
+            .then((response) => {
+                const userObject = JSON.stringify(response.data.user)
+                localStorage.setItem('userObject', userObject)
                 this.$router.push("/Home")
             });
         },

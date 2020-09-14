@@ -12,13 +12,13 @@ const LOGOUT = "LOGOUT";
 export default new Vuex.Store({
 state: {
     homelink: "/",
-    ProfilePageLink: "/ProfilePage",
     images: {
         logo: "Logo Grouposcape"
     },
     token: `Bearer ${localStorage.getItem('token')}`,
     URL: 'http://localhost:5000/api/v1/',
-    posts: []
+    posts: [],
+    user: {}
 },
 mutations: {
     [LOGIN] (state) {
@@ -46,7 +46,7 @@ actions: {
                     localStorage.setItem('myUserId', response.data.userId);
                     localStorage.setItem('isAdmin', response.data.user.isAdmin);
                     commit(LOGIN_SUCCESS);
-                    resolve();
+                    resolve(response);
                 })
                 .catch(error => {
                     console.log(error);

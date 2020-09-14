@@ -4,8 +4,8 @@
             <router-link to="/Home" class="profile-link">
                 <img src="../assets/icon.svg" :alt="$store.state.images.logo">
             </router-link>
-            <div class="search-bar" >
-                <input type="text" placeholder="Rechercher">
+            <div class="my-profile" >
+                <span>{{ userObject.firstName }} {{ userObject.lastName }}</span>
             </div>
 
             <router-link :to="{ name: 'ProfilePage', params: { profileToLoad } }" class="profile-link">Mon profil</router-link>
@@ -25,7 +25,8 @@ export default {
     data() {
         return {
             profileToLoad: localStorage.getItem('myUserId'),
-            userName: ''
+            userName: '',
+            userObject: JSON.parse(localStorage.getItem('userObject'))
         }
     },
     methods: {

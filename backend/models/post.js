@@ -11,15 +11,7 @@ module.exports = (sequelize, Sequelize) => {
         content: {
             type: Sequelize.TEXT,
             allowNull: false
-        },
-        like: {
-            type: Sequelize.INTEGER,
-            allowNull: true,
-        },
-        dislike: {
-            type: Sequelize.INTEGER,
-            allowNull: true,
-        },
+        }
     });
     Post.associate = function(models) {
         Post.belongsTo(models.user, {foreignKey: 'authorId', hooks: true, as: 'author'})
