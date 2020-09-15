@@ -1,17 +1,19 @@
 <template>
     <div>
         <div class="container">
-            <router-link to="/Home" class="profile-link">
-                <img src="../assets/icon.svg" :alt="$store.state.images.logo">
-            </router-link>
-            <div class="my-profile" >
-                <span>{{ userObject.firstName }} {{ userObject.lastName }}</span>
+            <div class="homelink">
+                <router-link to="/Home" class="homelink_content">
+                    <img src="../assets/icon.svg" alt="Icone Groupomania">
+                    <h1>Groupomania</h1>
+                </router-link>
             </div>
 
-            <router-link :to="{ name: 'ProfilePage', params: { profileToLoad } }" class="profile-link">Mon profil</router-link>
 
-            <div @click="logout">
-                <router-link  to="/" >Déconnexion</router-link>
+            <div class="account">
+                <router-link :to="{ name: 'ProfilePage', params: { profileToLoad } }" class="profile-link">Mon profil</router-link>
+                <div @click="logout">
+                    <router-link class="logout" to="/" >Déconnexion</router-link>
+                </div>
             </div>
             
         </div>
@@ -39,62 +41,62 @@ export default {
 
 <style lang="scss" scoped>
 
-.connection-page{
-    background-color: rgb(40, 108, 209);
-    height: 4.5em;
-    width: 100%;
-
-    &_logo{
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        & a img{
-        height: 50px;
-        }
-    }
-}
-
 .container {
     width: 100%;
-    height: 42px;
-    background-color: rgb(40, 108, 209);
+    height: 3em;
+    background-color:#557d96;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    & a img{
-        height: 32px;
-        width: 32px;
-        margin: 0 5px 0 0;
-    }
+    & .homelink{
+        position: relative;
+        flex-grow: 1;
 
-    & .search-bar{
-        width: 400px;
+        &_content{
+            line-height: 0;
+            display: flex;
+            justify-content: center;
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: color .3s;
+            &:hover{
+            color: #ff5c67;
+            }
 
-        & input{
-        width: 100%;
-        height:20px
+            & img{
+                height: 2.5em;
+            }
+
         }
     }
 
-    & .profile-link{
-        margin: 0 15px 0 30px;
-        text-decoration: none;
-        color: white;
-        
-        &:hover{
-        text-decoration: underline;
-        }
-    }
+    & .account{
+        flex-grow: 1;
+        display: flex;
+        flex-direction: row;
+        width: 20%;
+        justify-content: space-around;
 
-    & button{
-        height: 30px;
-        border: 1px solid rgb(37, 99, 192);
-        background-color: rgb(52, 123, 231);
-        font-weight: bold;
-        cursor: pointer;
-        color: white;
+        & .profile-link{
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: color .3s;
+
+            &:hover{
+                color: #000000;
+            }
+        }
+
+        & .logout{
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: color .3s;
+
+            &:hover{
+                color: #fd3131 ;
+            }        
+        }
     }
 }
 </style>

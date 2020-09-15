@@ -18,14 +18,28 @@ export default {
 <style lang="scss" >
 
 html, body {
-  margin: 0px !important;
-  padding: 0px !important;
-  box-sizing: border-box;
+    margin: 0px !important;
+    padding: 0px !important;
+    box-sizing: border-box;
+    background-color: #b0d8ff;
 }
 
 body{
     margin: 0;
     padding: 0;
+}
+
+body::-webkit-scrollbar {
+    width: .4em;
+}
+
+body::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
 }
 
 #app {

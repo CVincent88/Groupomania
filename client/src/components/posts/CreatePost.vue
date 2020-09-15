@@ -1,6 +1,6 @@
 <template>
 <div class="post-creator">
-    <textarea type="text" name="post" id="post" placeholder="Que souaitez-vous publier ?" v-model="content"></textarea>
+    <textarea type="text" name="post" id="post" placeholder="Que souhaitez-vous publier ?" v-model="content"></textarea>
     <button @click="createPost">Publier</button>
 </div>
 </template>
@@ -55,23 +55,23 @@ export default {
 .post-creator{
     display: flex;
     flex-direction: column;
-    margin: 20px 8px;
-    padding: 10px;
-    background-color: #425561;
+    justify-content: center;
+    position: relative;
+    padding: 5px;
+    background-color: #557d96;
     border-radius: 10px 10px;
     box-shadow: 2px 2px 10px rgba(195, 209, 216, .7);
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    margin-bottom: 2em;
 
     & textarea{
-        width: 95%;
-        height: 200px;
+        width: 100%;
+        height: 100px;
+        box-sizing: border-box;
         border-radius: 10px 10px;
         border: none;
         padding: 10px 10px;
-        max-width: 99%;
-        min-width: 95%;
+        resize: none;
+
 
         &:focus{
             outline: 1px solid #347BE7;
@@ -79,13 +79,15 @@ export default {
     }
 
     & button{
-        margin-top: 15px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 10px;
         border: none;
         border-radius: 4px 4px;
         outline: 0;
         background-color: #347BE7;
-        min-width: 95%;
-        height: 50px;
+        padding: 5px;
         cursor: pointer;
 
     }

@@ -5,13 +5,14 @@ import store from './store'
 
 //Fontawesome Libraries
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faSearch)
+library.add(faThumbsUp)
+library.add(faThumbsDown)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
 
 Vue.config.productionTip = false
 

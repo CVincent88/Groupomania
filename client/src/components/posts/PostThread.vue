@@ -1,9 +1,6 @@
 <template>
 <div>
-    <li class="single-post" v-for="(post, index) in this.$store.state.posts"
-        :key="post.id"
-        :index="index+1">
-        <p>{{ index }}</p>
+    <li class="single-post" v-for="post in this.$store.state.posts" :key="post.id">
         <div class="user">
             <img class="profile-picture" src="../../../public/images/default_profile_picture.jpg" alt="Default profile picture">
             <router-link :to="{
@@ -19,12 +16,14 @@
         </div>
         <div class="users-reactions">
             <div class="likes">
-                <button :class="doILike(post) ? 'activated-button' : 'empty'" @click="reactOnPost(post, 1)" >J'aime</button>
-                <span v-if="post.arrayOfReaction.likes.length > 0" class="like-number reaction-number">{{ post.arrayOfReaction.likes.length }}</span>
+                <font-awesome-icon icon="thumbs-up" :class="doILike(post) ? 'like-highlight' : ''" class="icon" @click="reactOnPost(post, 1)"/>
+
+                <span v-show="post.arrayOfReaction.likes.length > 0" class="like-number reaction-number">{{ post.arrayOfReaction.likes.length }}</span>
             </div>
             <div class="dislikes">
-                <button :class="doIDislike(post) ? 'activated-button' : 'empty'" @click="reactOnPost(post, 0)" >Je n'aime pas</button>
-                <span v-if="post.arrayOfReaction.dislikes.length > 0" class="dislike-number reaction-number">{{ post.arrayOfReaction.dislikes.length }}</span>
+                <font-awesome-icon icon="thumbs-down" :class="doIDislike(post) ? 'dislike-highlight' : 'empty'" class="icon" @click="reactOnPost(post, 0)"/>
+                
+                <span v-show="post.arrayOfReaction.dislikes.length > 0" class="dislike-number reaction-number">{{ post.arrayOfReaction.dislikes.length }}</span>
             </div>
         </div>
     </li>
@@ -203,7 +202,6 @@ export default {
 
                 // If he has not already disliked the post, we create a new Dislike entry in the database
                 if(!post.arrayOfReaction.dislikes.includes(this.userObject.id)){
-                    console.log('test 1')
                     axios.post(this.$store.state.URL + 'likes/', {
                         reaction: reaction,
                         authorId: this.userObject.id,
@@ -252,9 +250,10 @@ export default {
 <style lang="scss" scoped>
 
 .single-post{
+    position: relative;
     display: flex;
     flex-direction: column;
-    background-color: rgba(160, 174, 255, .2);
+    background-color: #557d96;
     border-radius: 10px 10px;
     margin: 0 0 30px 0;
     padding: 10px;
@@ -264,7 +263,7 @@ export default {
 .loading {
     text-align: center;
     position: absolute;
-    color: #fff;
+    color: #ffffff;
     z-index: 9;
     background: rgb(107, 107, 209);
     padding: 8px 18px;
@@ -288,7 +287,7 @@ export default {
     & .profile-link{
         text-decoration: none;
         padding-left: 5px;
-        color: black;
+        color: #FFFFFF;
 
         &:hover{
             color: blue;
@@ -308,16 +307,37 @@ export default {
 
 .post-content-box{
     text-align: start;
+    margin-bottom: 15px;
+
+    & .post-content{
+        color: #FFFFFF;
+    }
 }
 
 .users-reactions{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    background-color:  #7fb1d1;
+    border-radius: 0 0 10px 10px;
+    padding: 5px 0;
+
+    & > * .icon{
+        cursor: pointer;
+    }
+
 }
 
-.activated-button {
-    background-color: red;
+.like-highlight{
+    color: rgb(49, 114, 255);
+}
+
+.dislike-highlight {
+    color: rgb(247, 70, 17);
 }
 
 </style>

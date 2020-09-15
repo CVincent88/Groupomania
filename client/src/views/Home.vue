@@ -1,17 +1,28 @@
 <template>
-<div class="home">
-    <TopBanner class="topBanner"/>
-    <div class="wrapper" id="app">
-        <div>
-            <div class="me">
-            {{ myName }}
+<div class="home" id="app">
+    <TopBanner />
+    <div class="wrapper">
+        <div class="information">
+            <div class="information_user">
+                <img src="../../public/images/default_profile_picture.jpg" alt="Profile picture">
+                <router-link :to="{
+                name: 'ProfilePage', 
+                params: { profileToLoad: this.userObject.id }}" 
+                class="information_user_name">{{ userObject.firstName }} {{ userObject.lastName }}</router-link>
             </div>
-            <CreatePost />
+            <div class="information_news">
+                <h2 class="title">Actus Groupomania</h2>
+                <ul>
+                    <li>news 1</li>
+                    <li>news 2</li>
+                    <li>news 3</li>
+                    <li>news 4</li>
+                </ul>
+            </div>
         </div>
-        <div class="list-group-wrapper">
-            <ul class="list-group" id="infinite-list"> <!-- id utilisé par la méthode de PostThread -->
-                <PostThread />
-            </ul>
+        <div class="publication">
+            <CreatePost class="test"/>
+            <PostThread class="test2"/>
         </div>
     </div>
 </div>
@@ -34,7 +45,8 @@ export default {
     },
     data() {
         return {
-            myName: ''
+            test: 'test',
+            userObject: JSON.parse(localStorage.getItem('userObject'))
         }
     },
     beforeMount() {
@@ -54,17 +66,67 @@ export default {
 <style lang="scss" scoped>
 
 .wrapper {
-    display: flex;
-    flex-flow: row wrap;
-    border: 1px solid black;
+    display: grid;
+    align-items: center;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 1fr 1fr;
     width: 95%;
     margin: 20px auto;
-    justify-content: space-around;
-}
 
-.test{
-    height: 200px;
-    width: 200px;
+    & .information{
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        width: 50%;
+        margin: auto;
+
+        &_user{
+            display: flex;
+            flex-direction: column;
+
+            &_name{
+                margin-top: 10px;
+                text-decoration: none;
+                color: black;
+
+                &:hover{
+                    color: blue;
+                }
+            }
+        }
+
+        &_news{
+            border: 1px solid black;
+            background-color: #557d96;
+            width: 80%;
+            margin: 30px;
+            text-align: start;
+
+            & .title{
+                text-align: center;
+                color: #FFFFFF;
+            }
+
+            & ul li{
+                color: #FFFFFF;
+            }
+        }
+    }
+
+    & .publication{
+        grid-column: 2 / 3;
+
+        & .test{
+            grid-row: 1 / 2;
+        }
+    
+        & .test2{
+            grid-row: 2 / 3;
+        }
+    }
 }
 
 .wrapper > * {
@@ -72,16 +134,6 @@ export default {
     flex-grow: 1;
 }
 
-.list-group-wrapper {
-    position: relative;
-}
-.list-group {
-    overflow: auto;
-    height: 75vh;
-    border: 2px solid #dce4ec;
-    border-radius: 5px;
-    padding: 10px 10px;
-}
 
 
 
