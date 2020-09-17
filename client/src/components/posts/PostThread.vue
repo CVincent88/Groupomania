@@ -3,10 +3,9 @@
     <li class="single-post" v-for="post in this.$store.state.posts" :key="post.id">
         <div class="user">
             <img class="profile-picture" src="../../../public/images/default_profile_picture.jpg" alt="Default profile picture">
-            <router-link :to="{
+            <router-link :to="{ 
                 name: 'ProfilePage', 
-                params: { profileToLoad: JSON.stringify(post.author.id) }
-            }" 
+                params: { profileToLoad: JSON.stringify(post.author.id) }}" 
                 class="profile-link">
                 {{ `${post.author.firstName} ${post.author.lastName}` }}
             </router-link>
@@ -17,13 +16,11 @@
         <div class="users-reactions">
             <div class="likes">
                 <font-awesome-icon icon="thumbs-up" :class="doILike(post) ? 'like-highlight' : ''" class="icon" @click="reactOnPost(post, 1)"/>
-
-                <span v-show="post.arrayOfReaction.likes.length > 0" class="like-number reaction-number">{{ post.arrayOfReaction.likes.length }}</span>
+                <span v-show="post.arrayOfReactions.likes.length > 0" class="like-number reaction-number">{{ post.arrayOfReactions.likes.length }}</span>
             </div>
             <div class="dislikes">
                 <font-awesome-icon icon="thumbs-down" :class="doIDislike(post) ? 'dislike-highlight' : 'empty'" class="icon" @click="reactOnPost(post, 0)"/>
-                
-                <span v-show="post.arrayOfReaction.dislikes.length > 0" class="dislike-number reaction-number">{{ post.arrayOfReaction.dislikes.length }}</span>
+                <span v-show="post.arrayOfReactions.dislikes.length > 0" class="dislike-number reaction-number">{{ post.arrayOfReactions.dislikes.length }}</span>
             </div>
         </div>
     </li>
@@ -57,30 +54,42 @@ export default {
     },
 
     methods: {
-        createArrayOfReactions(post) {
+        removeFromArray(array, value){
+            return array.filter(function(newTable){
+                return newTable != value; 
+            })
+        },
+        createarrayOfReactionss(post) {
             let reactions = {
                 likes: [],
                 dislikes: []
             }
 
             for (let i=0; i<post.reactions.length; i++){
-                if(post.reactions[i].reaction == 1){
-                    reactions.likes.push(post.reactions[i].authorId)
-                }else if(post.reactions[i].reaction == 0){
-                    reactions.dislikes.push(post.reactions[i].authorId)
+                if(!reactions.likes.includes(post.reactions[i].authorId) && !reactions.dislikes.includes(post.reactions[i].authorId)){
+                    if(post.reactions[i].reaction == 1){
+                        reactions.likes.push(post.reactions[i].authorId)
+                    }else if(post.reactions[i].reaction == 0){
+                        reactions.dislikes.push(post.reactions[i].authorId)
+                    }else{
+                        console.log('erreur de la fonction: createarrayOfReactionss()')
+                    }
+                }else if(reactions.likes.includes(post.reactions[i].authorId)){
+                    this.removeFromArray(reactions.likes, post.reactions[i].authorId)
+                }else if(reactions.disllikes.includes(post.reactions[i].authorId)){
+                    this.removeFromArray(reactions.dislikes, post.reactions[i].authorId)
                 }else{
-                    console.log('error de condition')
+                    console.log('erreur de la fonction: createarrayOfReactionss()')
                 }
             }
-
             return reactions
         },
         doILike(post){
             const userId = this.userObject.id;
 
-            if(post.arrayOfReaction.likes.length > 0){
-                for(let i=0; i<post.arrayOfReaction.likes.length; i++){
-                    if(post.arrayOfReaction.likes[i] == userId){
+            if(post.arrayOfReactions.likes.length > 0){
+                for(let i=0; i<post.arrayOfReactions.likes.length; i++){
+                    if(post.arrayOfReactions.likes[i] == userId){
                         return true
                     }
                 }
@@ -92,9 +101,9 @@ export default {
         doIDislike(post){
             const userId = this.userObject.id;
 
-            if(post.arrayOfReaction.dislikes.length > 0){
-                for(let i=0; i<post.arrayOfReaction.dislikes.length; i++){
-                    if(post.arrayOfReaction.dislikes[i] == userId){
+            if(post.arrayOfReactions.dislikes.length > 0){
+                for(let i=0; i<post.arrayOfReactions.dislikes.length; i++){
+                    if(post.arrayOfReactions.dislikes[i] == userId){
                         return true
                     }
                 }
@@ -130,7 +139,7 @@ export default {
                 else if (!foundInPosts) {
                     
                     // On calcule le nombre de likes et dislikes
-                    thisPost.arrayOfReaction = this.createArrayOfReactions(thisPost);
+                    thisPost.arrayOfReactions = this.createarrayOfReactionss(thisPost);
                     
                     // On enregistre
                     this.$store.state.posts.push(thisPost);
@@ -158,9 +167,8 @@ export default {
         reactOnPost(post, reaction) {
             // If the user clicks on like button
             if(reaction == 1){
-
                 // If he has not already liked the post, we create a new Like entry in the database
-                if(!post.arrayOfReaction.likes.includes(this.userObject.id)){
+                if(!post.arrayOfReactions.likes.includes(this.userObject.id)){
                     axios.post(this.$store.state.URL + 'likes/', {
                         reaction: reaction,
                         authorId: this.userObject.id,
@@ -172,9 +180,8 @@ export default {
                         }
                     })
                     .then(() => {
-                        console.log('Le like a été ajouté à la base de données')
                         // This line is here so that the button highlights immediately without another XHR
-                        post.arrayOfReaction.likes.push(this.userObject.id)
+                        post.arrayOfReactions.likes.push(this.userObject.id)
                     })
                 }else{
 
@@ -191,17 +198,14 @@ export default {
                         }
                     })
                     .then(() => {
-                        console.log('Le like a été supprimé de la base de données')
-                        for(let i = 0; i < post.arrayOfReaction.likes.length; i++){ 
-                            post.arrayOfReaction.likes.splice(i, this.userObject.id)
-                        }
+                        post.arrayOfReactions.likes = this.removeFromArray(post.arrayOfReactions.likes, this.userObject.id)
                     })
                 }
 
             }else if (reaction == 0){
 
                 // If he has not already disliked the post, we create a new Dislike entry in the database
-                if(!post.arrayOfReaction.dislikes.includes(this.userObject.id)){
+                if(!post.arrayOfReactions.dislikes.includes(this.userObject.id)){
                     axios.post(this.$store.state.URL + 'likes/', {
                         reaction: reaction,
                         authorId: this.userObject.id,
@@ -214,7 +218,7 @@ export default {
                     })
                     .then(() => {
                         // This line is here so that the button highlights immediately without another XHR
-                        post.arrayOfReaction.dislikes.push(this.userObject.id)
+                        post.arrayOfReactions.dislikes.push(this.userObject.id)
 
                     })
                 }else{
@@ -233,9 +237,7 @@ export default {
                     })
                     .then(() => {
                         // This code is here so that the button highlights immediately without another XHR
-                        for(let i = 0; i < post.arrayOfReaction.dislikes.length; i++){ 
-                            post.arrayOfReaction.dislikes.splice(i, this.userObject.id)
-                        }
+                        post.arrayOfReactions.dislikes = this.removeFromArray(post.arrayOfReactions.dislikes, this.userObject.id)
                     })
                 }
 

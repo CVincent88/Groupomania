@@ -46,7 +46,6 @@ export default {
                 headers: {'authorization': `${localStorage.getItem('token')}`}
             })
             .then((response) => {
-                console.log(response);
                 localStorage.clear();
                 this.$router.push({
                     path: `/`

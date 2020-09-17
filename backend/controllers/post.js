@@ -21,7 +21,7 @@ exports.createPost = (req, res) => {
             res.send(data);
         })
         .catch(err => {
-            res.status(500).send({message: err.message || "Some error occurred while creating the post." });
+            res.status(500).send({message: err || "Some error occurred while creating the post." });
         });
 };
 
@@ -51,9 +51,10 @@ exports.findLatestPost = (req, res) => {
 
 // Retrieve one post from the database.
 exports.findOne = (req, res) => {
-    const postId = req.body.id;
+    const postId = req.params.id;
 
-    Post.findByPk(postId)
+    Post
+        .findOne({where: {id: postId},include: [{all:true}]})
         .then(post => {
             res.status(200).json(post);
         })

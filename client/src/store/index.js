@@ -33,6 +33,7 @@ mutations: {
     }
 },
 actions: {
+
     login({ commit }, options) {
         if(options.emailAddress != "" && options.password != ""){
             commit(LOGIN); // show spinner

@@ -11,7 +11,7 @@ router.get("/", posts.findAllPosts);
 router.get("/latest", auth, posts.findLatestPost);
 
 // Get one post
-router.get("/", posts.findOne);
+router.get("/:id", posts.findOne);
 
 // Get all posts of a specific user
 router.get("/:id/author", auth, posts.findUserByPost);

@@ -32,13 +32,19 @@ export default {
             .then((res) => {
                 this.eraseText();
                 if (res.status === 200) {
-                    axios.get(this.$store.state.URL + 'posts/latest', {
+                    axios.get(this.$store.state.URL + 'posts/' + res.data.id, {
                         headers: {
                             'Authorization': this.$store.state.token
                         }
                     })
                     .then((res) => {
-                        this.$store.state.posts.unshift(...res.data)
+                        let newPost = res.data;
+                        newPost.arrayOfReactions = {
+                            likes: [],
+                            dislikes: [],
+
+                        }
+                        this.$store.state.posts.unshift(newPost)
                     })
                 }
             })

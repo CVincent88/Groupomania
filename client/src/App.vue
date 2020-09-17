@@ -17,29 +17,33 @@ export default {
 
 <style lang="scss" >
 
+
+
 html, body {
     margin: 0px !important;
     padding: 0px !important;
     box-sizing: border-box;
     background-color: #b0d8ff;
+    // font-size: 10px;
 }
 
 body{
     margin: 0;
     padding: 0;
-}
+    min-height: 100vh;
 
-body::-webkit-scrollbar {
-    width: .4em;
-}
+    &::-webkit-scrollbar {
+        width: .4em;
+    }
 
-body::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    }
 
-body::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    &::-webkit-scrollbar-thumb {
+        background-color: darkgrey;
+        outline: 1px solid slategrey;
+    }
 }
 
 #app {
@@ -47,19 +51,5 @@ body::-webkit-scrollbar-thumb {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
-}
-
-#nav {
-    padding: 30px;
-
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-        color: #42b983;
-        }
-    }
 }
 </style>

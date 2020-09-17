@@ -52,15 +52,19 @@
             </div>
         
         </div>
+        <Footer />
     </div>
 </template>
 
 <script>
-// import userService from '../userService.js'
+import Footer from '../components/Footer'
 import axios from 'axios'
 
 export default {
     name: 'Connexion',
+    components: {
+        Footer
+    },
     data() {
         return {
             URL: 'http://localhost:5000/api/v1/users/',
@@ -85,8 +89,17 @@ export default {
                 URL: this.URL
             })
             .then((response) => {
-                const userObject = JSON.stringify(response.data.user)
-                localStorage.setItem('userObject', userObject)
+                let userObject = {
+                    id: response.data.user.id,
+                    emailAddress: response.data.user.emailAddress,
+                    firstName: response.data.user.firstName,
+                    lastName: response.data.user.lastName,
+                    biography: response.data.user.biography,
+                    profileImage: response.data.user.profileImage,
+                    isAdmin: response.data.user.isAdmin
+                }
+                
+                localStorage.setItem('userObject', JSON.stringify(userObject))
                 this.$router.push("/Home")
             });
         },
@@ -115,9 +128,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container{
+    min-height: 100vh;
+    background-color: #B0D8FF;
+    position: relative;
+}
+
+Footer{
+    position: absolute;
+    bottom: 0px;
+}
 
 .connection-page{
-    background-color: rgb(40, 108, 209);
     height: 4.5em;
     width: 100%;
 
@@ -126,15 +148,11 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: #557D96;
         & a img{
-        height: 50px;
+            height: 50px;
         }
     }
-}
-
-.container{
-    min-height: 100vh;
-    background-color: #E9EBEE;
 }
 
 input{
@@ -149,6 +167,7 @@ input{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
 
     @media screen and (max-width: 425px) {
         flex-direction: column;
@@ -219,6 +238,7 @@ input{
 
     & .signup{
         display: grid;
+        grid-gap: .4rem;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr auto auto auto 1fr;
         justify-items: center;
@@ -228,13 +248,11 @@ input{
             grid-template-rows: 1fr repeat(4, auto) 1fr;
         }
 
-        & input{
-            margin: 4px;
 
-            &::placeholder{
+            & input::placeholder{
                 font-size: 1.2em;
             }
-        }
+        
 
         & .create-account{
             grid-column: 1 / 3;
@@ -254,6 +272,7 @@ input{
         &_last-name{
             grid-column: 2 / 3;
             grid-row: 2 / 3;
+            width: 100%;
 
             @media screen and (max-width: 820px) {
                 grid-column: 1 / 3;
@@ -268,6 +287,7 @@ input{
 
             & input{
                 width: 100%;
+                box-sizing: border-box;
             }
 
             @media screen and (max-width: 820px) {

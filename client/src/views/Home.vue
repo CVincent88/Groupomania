@@ -2,22 +2,24 @@
 <div class="home" id="app">
     <TopBanner />
     <div class="wrapper">
-        <div class="information">
-            <div class="information_user">
-                <img src="../../public/images/default_profile_picture.jpg" alt="Profile picture">
-                <router-link :to="{
-                name: 'ProfilePage', 
-                params: { profileToLoad: this.userObject.id }}" 
-                class="information_user_name">{{ userObject.firstName }} {{ userObject.lastName }}</router-link>
-            </div>
-            <div class="information_news">
-                <h2 class="title">Actus Groupomania</h2>
-                <ul>
-                    <li>news 1</li>
-                    <li>news 2</li>
-                    <li>news 3</li>
-                    <li>news 4</li>
-                </ul>
+        <div class="container">
+            <div class="information">
+                <div class="information_user">
+                    <img src="../../public/images/default_profile_picture.jpg" alt="Profile picture">
+                    <router-link :to="{
+                    name: 'ProfilePage', 
+                    params: { profileToLoad: this.userObject.id }}" 
+                    class="information_user_name">{{ userObject.firstName }} {{ userObject.lastName }}</router-link>
+                </div>
+                <div class="information_news">
+                    <h2 class="title">Actus Groupomania</h2>
+                    <ul>
+                        <li>news 1</li>
+                        <li>news 2</li>
+                        <li>news 3</li>
+                        <li>news 4</li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="publication">
@@ -25,6 +27,8 @@
             <PostThread class="test2"/>
         </div>
     </div>
+
+    <Footer />
 </div>
 </template>
 
@@ -34,6 +38,7 @@
 import TopBanner from '@/components/TopBanner.vue'
 import PostThread from '@/components/posts/PostThread.vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
+import Footer from '@/components/Footer.vue'
 import axios from 'axios'
 
 export default {
@@ -41,7 +46,8 @@ export default {
     components: {
         TopBanner,
         PostThread,
-        CreatePost
+        CreatePost,
+        Footer
     },
     data() {
         return {
@@ -66,66 +72,58 @@ export default {
 <style lang="scss" scoped>
 
 .wrapper {
-    display: grid;
-    align-items: center;
-    grid-template-rows: 1fr auto;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: center;
     width: 95%;
     margin: 20px auto;
 
-    & .information{
-        grid-column: 1 / 2;
-        grid-row: 1 / 3;
+    & .container{
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: fixed;
-        width: 50%;
-        margin: auto;
+        justify-content: center;
+        margin: 0 15px;
 
-        &_user{
+        & .information{
             display: flex;
             flex-direction: column;
+            align-items: center;
+            position: fixed;
 
-            &_name{
-                margin-top: 10px;
-                text-decoration: none;
-                color: black;
+            &_user{
+                display: flex;
+                flex-direction: column;
 
-                &:hover{
-                    color: blue;
+                &_name{
+                    margin-top: 10px;
+                    text-decoration: none;
+                    color: black;
+
+                    &:hover{
+                        color: blue;
+                    }
                 }
             }
-        }
 
-        &_news{
-            border: 1px solid black;
-            background-color: #557d96;
-            width: 80%;
-            margin: 30px;
-            text-align: start;
+            &_news{
+                border: 1px solid black;
+                background-color: #557d96;
+                padding: 10px;
+                margin-top: 15px;
+                text-align: start;
 
-            & .title{
-                text-align: center;
-                color: #FFFFFF;
-            }
+                & .title{
+                    text-align: center;
+                    color: #FFFFFF;
+                }
 
-            & ul li{
-                color: #FFFFFF;
+                & ul li{
+                    color: #FFFFFF;
+                }
             }
         }
     }
 
     & .publication{
-        grid-column: 2 / 3;
-
-        & .test{
-            grid-row: 1 / 2;
-        }
-    
-        & .test2{
-            grid-row: 2 / 3;
-        }
+        margin: 0 15px;
     }
 }
 

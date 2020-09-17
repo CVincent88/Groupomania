@@ -23,8 +23,21 @@ exports.reactOnPost = (req, res, next) => {
         })
 };
 
+// exports.findOne = (req, res, next) => {
+//     Like.findOne({where: { authorId: req.body.authorId, postId: req.body.postId}})
+//     .then((result) => {
+//         res.status(200).json({result})
+//     })
+//     .catch(err => {
+//         res.status(404).json({err})
+//     })
+// };
+
 exports.findOne = (req, res, next) => {
-    Like.findOne({where: { authorId: req.body.authorId, postId: req.body.postId}})
+    const likeId = req.param('id')
+
+    console.log(req.params)
+    Like.findByPk(likeId)
     .then((result) => {
         res.status(200).json({result})
     })
@@ -35,7 +48,7 @@ exports.findOne = (req, res, next) => {
 
 // Delete a reactioin
 exports.deleteReaction = (req, res) => {
-    // For some reason, req.param('id') works, but req.params.id doesn't ...
+
     // const likeId = req.param('id');
     // const likeId = req.params.id;
 
