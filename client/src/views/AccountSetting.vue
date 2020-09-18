@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import TopBanner from '../components/TopBanner.vue'
+import TopBanner from '@/components/TopBanner.vue'
 import axios from 'axios'
 
 export default {
@@ -42,8 +42,8 @@ export default {
     },
     methods: {
         deleteAccount(){
-            axios.delete(this.URL + localStorage.getItem('userId'), {
-                headers: {'authorization': `${localStorage.getItem('token')}`}
+            axios.delete(this.URL + this.$store.state.userObject.id, {
+                headers: {'authorization': this.$store.state.token}
             })
             .then((response) => {
                 localStorage.clear();

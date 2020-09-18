@@ -8,10 +8,10 @@
 export default {
     name: 'App',
     beforeMount() {
-        if(!localStorage.getItem('token') && this.$route.path != '/'){
+        if(!this.$store.state.token && this.$route.path != '/'){
             this.$router.push("/")
         }
-    }
+    },
 }
 </script>
 
@@ -24,7 +24,6 @@ html, body {
     padding: 0px !important;
     box-sizing: border-box;
     background-color: #b0d8ff;
-    // font-size: 10px;
 }
 
 body{

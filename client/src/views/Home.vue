@@ -23,8 +23,8 @@
             </div>
         </div>
         <div class="publication">
-            <CreatePost class="test"/>
-            <PostThread class="test2"/>
+            <CreatePost />
+            <PostThread :posts="this.$store.state.posts" />
         </div>
     </div>
 
@@ -36,8 +36,8 @@
 <script>
 // @ is an alias to /src
 import TopBanner from '@/components/TopBanner.vue'
-import PostThread from '@/components/posts/PostThread.vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
+import PostThread from '@/components/posts/PostThread.vue'
 import Footer from '@/components/Footer.vue'
 import axios from 'axios'
 
@@ -45,18 +45,17 @@ export default {
     name: 'Home',
     components: {
         TopBanner,
-        PostThread,
         CreatePost,
-        Footer
+        PostThread,
+        Footer,
     },
     data() {
         return {
-            test: 'test',
-            userObject: JSON.parse(localStorage.getItem('userObject'))
+            userObject: this.$store.state.userObject
         }
     },
     beforeMount() {
-        axios.get(this.$store.state.URL + 'users/' + localStorage.getItem('myUserId'), {
+        axios.get(this.$store.state.URL + 'users/' + this.userObject.id, {
             headers: {
                 'Authorization': this.$store.state.token
             },
@@ -132,7 +131,24 @@ export default {
     flex-grow: 1;
 }
 
+.loading {
+    text-align: center;
+    position: absolute;
+    color: #ffffff;
+    z-index: 9;
+    background: rgb(107, 107, 209);
+    padding: 8px 18px;
+    border-radius: 5px;
+    left: calc(50% - 45px);
+    top: calc(50% - 18px);
+}
 
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0
+}
 
 
 </style>

@@ -50,7 +50,6 @@ exports.login = function(req, res) {
                                     process.env.JWT_KEY,
                                     { expiresIn: '60m'}
                                 ),
-                                userId: user.id,
                                 user: user
                             })
                         })
@@ -148,7 +147,10 @@ exports.updateUser = (req, res) => {
 exports.findPostsByUser = (req, res) => {
     const userId = req.params.id;
 
-    User.findByPk(userId, {include: ['publications']})
+    User.findOne({where: {
+        id: userId},
+        include: [{all:true}]
+    })
     .then((user) => {
         res.send(user)
     })

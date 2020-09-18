@@ -5,10 +5,10 @@ import store from './store'
 
 //Fontawesome Libraries
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+import { faThumbsUp, faThumbsDown, faCog } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faThumbsUp, faThumbsDown)
+library.add(faThumbsUp, faThumbsDown, faCog)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

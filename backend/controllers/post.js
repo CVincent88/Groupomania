@@ -127,17 +127,18 @@ exports.deletePost = (req, res) => {
         })
 };
 
-// Find a post and its author.
-exports.findUserByPost = (req, res) => {
-    const id = req.params.id
-    Post.findOne({
-        where: {id: id}, include: ['author']
+// Find all posts of a specific user.
+exports.findPostsByUser = (req, res) => {
+    const authorId = req.params.authorId;
+
+    Post.findAll({
+        where: {authorId: authorId}, include: [{all:true}]
     })
-        .then((User) => {
-            res.send(User)
+        .then((user) => {
+        res.send(user)
         })
         .catch((err) => {
-            res.send.json({ error: err})
+        console.log("Error while find company : ", err)
         })
-}
+};
 

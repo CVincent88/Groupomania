@@ -17,9 +17,9 @@
                         <button @click="saveProfilePicture">Upload</button>
                     </div>
                 </div>
-
+                <p class="aboutMe">À propos de moi: </p>
                 <div class="biography">
-                    <p class="aboutMe">À propos de moi: </p>
+                    
                     <div class="biography_text">
                         <p>{{ registeredBiography }}</p>
                     </div>
@@ -37,30 +37,12 @@
             </div>
 
             <div class="myPosts">
-                <button @click="getUserPosts">Afficher mes publications</button>
-                <li class="single-post" v-for="post in posts" :key="post.id">
-                    <div class="user">
-                        <img class="profile-picture" src="../../public/images/default_profile_picture.jpg" alt="Default profile picture">
-                        <!-- <span class="profile-link">
-                            {{ `${post.author.firstName} ${post.author.lastName}` }}
-                        </span> -->
-                    </div>
-                    <div class="post-content-box">
-                        <p class="post-content">{{ post.content }}</p>
-                    </div>
-                    <div class="users-reactions">
-                        <div class="likes">
-                            <font-awesome-icon icon="thumbs-up" :class="doILike(post) ? 'like-highlight' : ''" class="icon" @click="reactOnPost(post, 1)"/>
-
-                            <span v-show="post.arrayOfReactions.likes.length > 0" class="like-number reaction-number">{{ post.arrayOfReactions.likes.length }}</span>
-                        </div>
-                        <div class="dislikes">
-                            <font-awesome-icon icon="thumbs-down" :class="doIDislike(post) ? 'dislike-highlight' : 'empty'" class="icon" @click="reactOnPost(post, 0)"/>
-                            
-                            <span v-show="post.arrayOfReactions.dislikes.length > 0" class="dislike-number reaction-number">{{ post.arrayOfReactions.dislikes.length }}</span>
-                        </div>
-                    </div>
-                </li>
+                <button :class="{ hidden: isHidden }" @click="getUserPosts">Afficher mes publications</button>
+                <ul>
+                    <li class="list-element" v-for="post in posts" :key="post.id">
+                        <SinglePost :post="post"/>
+                    </li>
+                </ul>
             </div>
             
         </div>
@@ -86,7 +68,6 @@
                         <button @click="getUserPosts">Afficher les posts de {{ username }}</button>
                         
                         <li class="single-post" v-for="post in posts" :key="post.id">
-
                             <div class="post-content-box">
                                 <p class="post-content">{{ post.content }}</p>
                             </div>
@@ -112,8 +93,9 @@
 </template>
 
 <script>
-import TopBanner from '../components/TopBanner'
-import Footer from '../components/Footer'
+import TopBanner from '@/components/TopBanner'
+import SinglePost from '@/components/posts/SinglePost'
+import Footer from '@/components/Footer'
 import axios from 'axios'
 
 export default {
@@ -125,22 +107,28 @@ export default {
             registeredBiography: '',
             newProfilePicture: '',
             username: '',
-            userObject: JSON.parse(localStorage.getItem('userObject')),
+            userObject: this.$store.state.userObject,
             posts: [],
-            postsDisplayed: false
+            alreadyPosted: [],
+            postsDisplayed: false,
+            isHidden: false
         }
     },
     components: {
         TopBanner,
+        SinglePost,
         Footer
     },
     methods: {
+        hideButton() {
+
+        },
         // Upload profile picture
         onFileSelected(event) {
             this.profileImage = event.target.files[0]
         },
         saveProfilePicture() {
-            axios.put(this.$store.state.URL + 'users/' + localStorage.getItem('myUserId'), {
+            axios.put(this.$store.state.URL + 'users/' + this.$store.state.userObject.id, {
                 profileImage: this.profileImage
             },
             {
@@ -154,7 +142,7 @@ export default {
         },
         // Delete account
         deleteAccount() {
-            axios.delete(this.$store.state.URL + 'users/' + localStorage.getItem('myUserId'), {
+            axios.delete(this.$store.state.URL + 'users/' + this.$store.state.userObject.id, {
                 headers: {
                     'Authorization': this.$store.state.token
                 }
@@ -166,7 +154,7 @@ export default {
         },
         // Modify biography
         submitBiography() {
-            axios.put(this.$store.state.URL + 'users/' + localStorage.getItem('myUserId'), {
+            axios.put(this.$store.state.URL + 'users/' + this.$store.state.userObject.id, {
                 biography: this.newBiography  
             },
             {
@@ -185,17 +173,55 @@ export default {
         // Obtenir les posts de l'utilisateur
         getUserPosts() {
             if(this.postsDisplayed == false){
-                axios.get(this.$store.state.URL + 'users/' + this.$route.params.profileToLoad + '/posts', {
+                axios.get(this.$store.state.URL + 'posts/byAuthor/' + this.$route.params.profileToLoad, {
                     headers: {
                         'Authorization': this.$store.state.token
                     },
                 })
                 .then((response) => {
-                    this.posts.push(...response.data.publications);
-                    this.postsDisplayed = true
+                    if(response.status == 200){
+                        for(let i=0; i<response.data.length; i++){
+                            const thisPost = response.data[i]
+                            thisPost.arrayOfReactions = this.createArrayOfReactions(thisPost);
+                            this.posts.push(thisPost);
+                            this.isHidden = true;
+                        }
+                        this.postsDisplayed = true
+                    }else{
+                        console.log('Erreur lors de l\'obtention des publications utilisateur')
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
                 })
             }
-        }
+        },
+
+        createArrayOfReactions(post) {
+            let reactions = {
+                likes: [],
+                dislikes: []
+            }
+
+            for (let i=0; i<post.reactions.length; i++){
+                if(!reactions.likes.includes(post.reactions[i].authorId) && !reactions.dislikes.includes(post.reactions[i].authorId)){
+                    if(post.reactions[i].reaction == 1){
+                        reactions.likes.push(post.reactions[i].authorId)
+                    }else if(post.reactions[i].reaction == 0){
+                        reactions.dislikes.push(post.reactions[i].authorId)
+                    }else{
+                        console.log('erreur de la fonction: createArrayOfReactions()')
+                    }
+                }else if(reactions.likes.includes(post.reactions[i].authorId)){
+                    this.removeFromArray(reactions.likes, post.reactions[i].authorId)
+                }else if(reactions.disllikes.includes(post.reactions[i].authorId)){
+                    this.removeFromArray(reactions.dislikes, post.reactions[i].authorId)
+                }else{
+                    console.log('erreur de la fonction: createArrayOfReactions()')
+                }
+            }
+            return reactions
+        },
     },
     // Loads the user's biography
     beforeMount() {
@@ -230,6 +256,7 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        max-width: 50%;
 
 
         &_picture{
@@ -246,30 +273,40 @@ export default {
                 min-height: 75px;
             }
         }
+    & .aboutMe{
+        font-weight: bold;
+        margin-top: 15px;
+    }   
 
         & .biography{
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            max-height: 20vh;
             margin: 20px 0;
+            padding: 10px;
+            overflow: auto;
+            border: .1em solid rgba(0, 0, 0, 0.1);
+
+            &::-webkit-scrollbar {
+                width: .2em;
+            }
+            &::-webkit-scrollbar-track {
+                box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+            }
+            
+            &::-webkit-scrollbar-thumb {
+                background-color: darkgrey;
+                outline: 1px solid slategrey;
+            }
 
             @media screen and(max-width: 767px){
                 margin-top: 3em;
                 width: 100%;
             }
 
-            & .aboutMe{
-                font-weight: bold;
-                margin-top: 0;
-            }
-
-            &_text{
-                max-width: 80%;
-
-                & p{
-                    margin: 0;
-                }
+            &_text p{
+                margin: 0;
             }
 
         }
@@ -340,85 +377,48 @@ export default {
     }
 
     & .myPosts{
-        max-height: 50vh;
+        max-height: 60vh;
         overflow: auto;
         display: flex;
+        justify-content: center;
+        align-items: center;
         flex-direction: column;
 
-        & .single-post{
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: #557d96;
-            border-radius: 10px 10px;
-            margin: 0 0 30px 0;
-            padding: 10px;
-            box-shadow: 1px 1px 9px rgb(49, 54, 78);
+        &::-webkit-scrollbar {
+            width: .2em;
+        }
+        &::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background-color: darkgrey;
+            outline: 1px solid slategrey;
+        }
 
-            & .user{
+        & ul{
+            max-height: 100%;
+            padding-inline-start: 0;  
+            list-style-type: none;
+            padding: 15px;
+
+            & .list-element{
+                position: relative;
                 display: flex;
-                align-items: center;
-                text-align: start;
-
-                & .profile-link{
-                    text-decoration: none;
-                    padding-left: 5px;
-                    color: #FFFFFF;
-
-                    &:hover{
-                        color: blue;
-                    }
-                }
-
-                & .profile-picture{
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 5px 5px;
-                }
-
-                &_username{
-                    margin: 0 10px;
-                }
-            }
-
-            .post-content-box{
-                text-align: start;
-                margin-bottom: 15px;
-
-                & .post-content{
-                    color: #FFFFFF;
-                }
-            }
-
-            .users-reactions{
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-around;
-                background-color:  #7fb1d1;
-                border-radius: 0 0 10px 10px;
-                padding: 5px 0;
-
-                & > * .icon{
-                    cursor: pointer;
-                }
-
-            }
-
-            .like-highlight{
-                color: rgb(49, 114, 255);
-            }
-
-            .dislike-highlight {
-                color: rgb(247, 70, 17);
+                flex-direction: column;
+                background-color: #557d96;
+                border-radius: 10px 10px;
+                margin: 0 0 30px 0;
+                box-shadow: 1px 1px 9px rgb(49, 54, 78);
             }
         }
     }
 
     
+}
+
+.hidden {
+    display: none;
 }
 
 </style>

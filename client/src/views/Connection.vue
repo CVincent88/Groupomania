@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import Footer from '../components/Footer'
+import Footer from '@/components/Footer'
 import axios from 'axios'
 
 export default {
@@ -88,18 +88,15 @@ export default {
                 password: password,
                 URL: this.URL
             })
-            .then((response) => {
-                let userObject = {
-                    id: response.data.user.id,
-                    emailAddress: response.data.user.emailAddress,
-                    firstName: response.data.user.firstName,
-                    lastName: response.data.user.lastName,
-                    biography: response.data.user.biography,
-                    profileImage: response.data.user.profileImage,
-                    isAdmin: response.data.user.isAdmin
-                }
-                
-                localStorage.setItem('userObject', JSON.stringify(userObject))
+            .then(() => {
+                // let userObject = {
+                //     id: response.data.user.id,
+                //     emailAddress: response.data.user.emailAddress,
+                //     firstName: response.data.user.firstName,
+                //     lastName: response.data.user.lastName,
+                //     biography: response.data.user.biography,
+                //     profileImage: response.data.user.profileImage,
+                // }
                 this.$router.push("/Home")
             });
         },

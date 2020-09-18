@@ -15,7 +15,7 @@ export default {
     data() {
         return {
             content: '',
-            userId: localStorage.getItem('myUserId')
+            userId: this.$store.state.userObject.id
         }
     },
     methods: {

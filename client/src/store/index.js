@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
@@ -10,15 +11,17 @@ const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGOUT = "LOGOUT";
 
 export default new Vuex.Store({
+    plugins:[createPersistedState()],
 state: {
     homelink: "/",
     images: {
         logo: "Logo Grouposcape"
     },
-    token: `Bearer ${localStorage.getItem('token')}`,
+    token: '',
     URL: 'http://localhost:5000/api/v1/',
     posts: [],
-    user: {}
+    userObject: {},
+    isAdmin: false
 },
 mutations: {
     [LOGIN] (state) {
@@ -43,9 +46,9 @@ actions: {
                     password: options.password
                 })
                 .then((response) => {
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('myUserId', response.data.userId);
-                    localStorage.setItem('isAdmin', response.data.user.isAdmin);
+                    console.log(response)
+                    this.state.token = `Bearer ${response.data.token}`
+                    this.state.userObject = response.data.user
                     commit(LOGIN_SUCCESS);
                     resolve(response);
                 })

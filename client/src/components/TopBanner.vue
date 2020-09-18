@@ -26,9 +26,8 @@ export default {
     name: 'TopBanner',
     data() {
         return {
-            profileToLoad: localStorage.getItem('myUserId'),
+            profileToLoad: this.$store.state.userObject.id,
             userName: '',
-            userObject: JSON.parse(localStorage.getItem('userObject'))
         }
     },
     methods: {

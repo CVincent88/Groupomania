@@ -11,7 +11,7 @@ router.post("/signup", users.signup);
 router.post("/login", users.login);
 
 // Get user info
-router.get("/:id", multer, users.findUser);
+router.get("/:id", auth, multer, users.findUser);
 
 // Delete user account
 router.delete("/:id", auth, users.deleteUser);
@@ -19,7 +19,5 @@ router.delete("/:id", auth, users.deleteUser);
 // Update user account
 router.put("/:id", auth, users.updateUser);
 
-// Find all posts of a specific user
-router.get("/:id/posts", auth, users.findPostsByUser);
 
 module.exports = router;

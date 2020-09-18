@@ -5,22 +5,16 @@ const auth = require('../middlewares/auth');
 const posts = require("../controllers/post");
 
 // Get all posts
-router.get("/", posts.findAllPosts);
-
-// Get latest post
-router.get("/latest", auth, posts.findLatestPost);
+router.get("/", auth, posts.findAllPosts);
 
 // Get one post
 router.get("/:id", posts.findOne);
 
 // Get all posts of a specific user
-router.get("/:id/author", auth, posts.findUserByPost);
+router.get("/byAuthor/:authorId", auth, posts.findPostsByUser);
 
 // Create a new post
 router.post("/", auth, multer, posts.createPost);
-
-// Like or dislike a post
-// router.post("/:id/like", auth, multer, posts.opinionOnPost);
 
 // Modify one post
 router.put("/:id", auth, multer, posts.updatePost);

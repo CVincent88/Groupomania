@@ -36,7 +36,6 @@ exports.reactOnPost = (req, res, next) => {
 exports.findOne = (req, res, next) => {
     const likeId = req.param('id')
 
-    console.log(req.params)
     Like.findByPk(likeId)
     .then((result) => {
         res.status(200).json({result})
