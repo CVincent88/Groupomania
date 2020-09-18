@@ -95,36 +95,20 @@ exports.updatePost = (req, res, next) => {
 
 // Delete a post from database.
 exports.deletePost = (req, res) => {
-    // Appel du jwt pour empêcher de supprimer un post depuis un logiciel tiers (e.g. Postman)
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
-    const userId = decodedToken.userId;
     const postId = req.params.id;
 
-        // We first look for the post
-    Post.findOne({ where: { id: postId } })
-        .then((post) => {
-            // We make sure that the author of the post is the one trying to delete it
-            if(userId === post.authorId){
-                Post.destroy({ where : {id: postId}})
-                    .then(rowDeleted => {  
-                        if (rowDeleted == 1) {
-                            res.status(200).json({ message: "Post was deleted successfully!"});
-                        } else {
-                            res.send({ message: `Cannot delete post with id=${postId}. Maybe the post was not found!`});
-                        }
-                    })
-                    .catch(err => {
-                    res.status(500).send({ message: "Could not delete post with id=" + postId});
-                    });
-            } 
-            else {
-                res.status(401).json({ Error: 'You are not authorized to delete this post'});
+    Post.destroy({ where : {id: postId}})
+        .then(rowDeleted => {  
+            if (rowDeleted == 1) {
+                res.status(200).json({ message: "Post was deleted successfully!"});
+            } else {
+                res.send({ message: `Cannot delete post with id=${postId}. Maybe the post was not found!`});
             }
         })
-        .catch((err) =>{
-            res.status(500).json({ error: "Error while looking for the post"})
-        })
+        .catch(err => {
+        res.status(500).send({ message: "Could not delete post with id=" + postId});
+        });
+
 };
 
 // Find all posts of a specific user.

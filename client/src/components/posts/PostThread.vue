@@ -97,9 +97,9 @@ export default {
                         console.log('erreur de la fonction: createArrayOfReactions()')
                     }
                 }else if(reactions.likes.includes(post.reactions[i].authorId)){
-                    this.removeFromArray(reactions.likes, post.reactions[i].authorId)
+                    this.removeElementFromArray(reactions.likes, post.reactions[i].authorId)
                 }else if(reactions.disllikes.includes(post.reactions[i].authorId)){
-                    this.removeFromArray(reactions.dislikes, post.reactions[i].authorId)
+                    this.removeElementFromArray(reactions.dislikes, post.reactions[i].authorId)
                 }else{
                     console.log('erreur de la fonction: createArrayOfReactions()')
                 }
@@ -114,6 +114,7 @@ export default {
 
 .post-thread ul{   
 list-style-type: none;
+padding-inline-start: 0;
 
     & .list-element{
         position: relative;

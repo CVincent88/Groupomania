@@ -20,7 +20,7 @@ router.post("/", auth, multer, posts.createPost);
 router.put("/:id", auth, multer, posts.updatePost);
 
 // Delete one post
-router.delete("/:id", auth, posts.deletePost);
+router.delete("/:id", posts.deletePost);
 
 
 

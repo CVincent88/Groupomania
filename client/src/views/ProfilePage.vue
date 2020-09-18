@@ -213,9 +213,9 @@ export default {
                         console.log('erreur de la fonction: createArrayOfReactions()')
                     }
                 }else if(reactions.likes.includes(post.reactions[i].authorId)){
-                    this.removeFromArray(reactions.likes, post.reactions[i].authorId)
+                    this.removeElementFromArray(reactions.likes, post.reactions[i].authorId)
                 }else if(reactions.disllikes.includes(post.reactions[i].authorId)){
-                    this.removeFromArray(reactions.dislikes, post.reactions[i].authorId)
+                    this.removeElementFromArray(reactions.dislikes, post.reactions[i].authorId)
                 }else{
                     console.log('erreur de la fonction: createArrayOfReactions()')
                 }
@@ -257,6 +257,7 @@ export default {
         justify-content: center;
         align-items: center;
         max-width: 50%;
+        min-width: 50%;
 
 
         &_picture{
@@ -319,7 +320,6 @@ export default {
                 width: 100%;
                 height: 100px;
                 box-sizing: border-box;
-                // border-radius: 10px 10px;
                 border: none;
                 padding: 10px 10px;
                 resize: none;
@@ -377,6 +377,7 @@ export default {
     }
 
     & .myPosts{
+        min-width: 50%;
         max-height: 60vh;
         overflow: auto;
         display: flex;
@@ -397,6 +398,7 @@ export default {
         }
 
         & ul{
+            min-width: 90%;
             max-height: 100%;
             padding-inline-start: 0;  
             list-style-type: none;
