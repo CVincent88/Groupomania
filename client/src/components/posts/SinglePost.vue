@@ -3,12 +3,14 @@
     <div class="user">
         <div class="user_info">
             <img class="profile-picture" src="../../../public/images/default_profile_picture.jpg" alt="Default profile picture">
-            <router-link :to="{ 
-                name: 'ProfilePage', 
-                params: { profileToLoad: JSON.stringify(post.author.id) }}" 
-                class="profile-link">
-                {{ `${post.author.firstName} ${post.author.lastName}` }}
-            </router-link>
+            <div @click="loadProfile(post.author)">
+                <router-link :to="{ 
+                    name: 'ProfilePage', 
+                    params: { profileToLoad: post.author.id }}" 
+                    class="profile-link">
+                    {{ `${post.author.firstName} ${post.author.lastName}` }}
+                </router-link>
+            </div>
         </div>
         <div class="option-box">
             <font-awesome-icon icon="cog" v-if="userObject.id == post.authorId || this.$store.state.userObject.isAdmin == true" @click="openOptionBox(post.id)"/>
@@ -205,6 +207,10 @@ export default {
             }else{
                 console.log('Vous n\'êtes pas autorisé à supprimer ce message')
             }
+        },
+        loadProfile(profile){
+            this.$store.state.loadedProfilePage = profile;
+            console.log(this.$store.state.loadedProfilePage.firstName)
         }
     }
 }

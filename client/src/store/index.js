@@ -21,6 +21,7 @@ state: {
     URL: 'http://localhost:5000/api/v1/',
     posts: [],
     userObject: {},
+    loadedProfilePage: {},
     isAdmin: false
 },
 mutations: {

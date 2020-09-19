@@ -18,12 +18,12 @@ const routes = [
         component: Home
     },
     {
-        path: '/ProfilePage/:profileToLoad/',
+        path: '/ProfilePage/:profileToLoad',
         name: 'ProfilePage',
         component: ProfilePage,
         props: {
             name: 'profileToLoad',
-            default: "0",
+            default: '0',
             required: true
         }
     }
