@@ -31,9 +31,7 @@ export default {
     width: 100%;
     align-items: center;
     justify-content: space-between;
-
-
-
+    position: absolute;
 
     & .homelink{
         line-height: 0;
@@ -42,7 +40,7 @@ export default {
         color: #FFFFFF;
         text-decoration: none;
         transition: color .3s;
-        margin: 2em;
+        margin: 0 2em;
 
         &:hover{
         color: #ff5c67;
@@ -60,7 +58,7 @@ export default {
     }
 
     & .link{
-        margin: 2em;
+        margin: 0 2em;
 
         & span{
             margin: 1em;

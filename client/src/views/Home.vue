@@ -1,5 +1,5 @@
 <template>
-<div class="home" id="app">
+<div class="home" >
     <TopBanner />
     <div class="wrapper">
         <div class="container">

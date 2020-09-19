@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-            <div class="myPosts">
+            <div class="posts">
                 <button :class="{ hidden: isHidden }" @click="getUserPosts">Afficher mes publications</button>
                 <ul>
                     <li class="list-element" v-for="post in posts" :key="post.id">
@@ -47,45 +47,27 @@
             
         </div>
 
-        <div v-else>
+        <div v-else class="container">
             <div class="profile">
                 <div class="profile_picture">
                     <div>
                         <img src="../../public/images/default_profile_picture.jpg" alt="">
                     </div>
                 </div>
-
+                <p class="aboutMe">À propos de {{ username }}: </p>
                 <div class="biography">
-                    <p class="aboutMe">À propos de {{ username }}: </p>
                     <div class="biography_text">
                         <p>{{ registeredBiography }}</p>
                     </div>
                 </div>
-
-                <div v-if="1 == 1">
-                    <h2>Posts de {{ username }}</h2>
-                    <div class="user">
-                        <button @click="getUserPosts">Afficher les posts de {{ username }}</button>
-                        
-                        <li class="single-post" v-for="post in posts" :key="post.id">
-                            <div class="post-content-box">
-                                <p class="post-content">{{ post.content }}</p>
-                            </div>
-                            <div class="users-reactions">
-                                <div class="likes">
-                                    <button class="like-button reaction-button">J'aime</button>
-                                    <span class="like-number reaction-number">{{ post.like }}1</span>
-                                </div>
-                                <span>|</span>
-                                <div class="dislikes">
-                                    <button class="dislike-button reaction-button">Je n'aime pas</button>
-                                    <span class="dislike-number reaction-number">{{ post.dislike }}1</span>
-                                </div>
-                            </div>
-                        </li>
-
-                    </div>
-                </div>
+            </div>
+            <div v-if="this.$store.state.userObject.isAdmin == true" class="posts">
+                <button :class="{ hidden: isHidden }" @click="getUserPosts">Afficher les publications</button>
+                <ul>
+                    <li class="list-element" v-for="post in posts" :key="post.id">
+                        <SinglePost :post="post"/>
+                    </li>
+                </ul>
             </div>
         </div>
     <Footer />
@@ -376,7 +358,7 @@ export default {
         }
     }
 
-    & .myPosts{
+    & .posts{
         min-width: 50%;
         max-height: 60vh;
         overflow: auto;

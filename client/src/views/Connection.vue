@@ -1,56 +1,55 @@
 <template>
-    <div class="container">
-
-        <div class="connection-page">
-            <div class="connection-page_logo">
+    <div class="test">
+        <header class="connection-page-header">
+            <div class="connection-page-header_logo">
                 <router-link to="/">
-                <img src="../assets/icon-left-font-monochrome-white.svg" :alt="$store.state.logo">
+                <img src="../assets/icon-left-font-monochrome-white.svg" :alt="this.$store.state.logo">
                 </router-link>
             </div>
-        </div>
+        </header>
+        <div class="container">
+            <div class="forms">
+                <div class="login">
+                    <h2 class="registered">Déjà inscrit ?</h2>
 
-        <div class="forms">
-            <div class="login">
-                <h2 class="registered">Déjà inscrit ?</h2>
+                    <div class="email">
+                        <label for="email">Email: </label>
+                        <input type="text" v-model="userObjectLogin.emailAddress">
+                    </div>
 
-                <div class="email">
-                    <label for="email">Email: </label>
-                    <input type="text" v-model="userObjectLogin.emailAddress">
+                    <div class="password">
+                        <label for="password">Mot de passe: </label>
+                        <input type="password" v-model="userObjectLogin.password">
+                    </div>
+
+                    <button v-on:click="login(userObjectLogin.emailAddress, userObjectLogin.password)">Connexion</button>
                 </div>
 
-                <div class="password">
-                    <label for="password">Mot de passe: </label>
-                    <input type="password" v-model="userObjectLogin.password">
-                </div>
+                <div class="signup">
+                    <h2 class="create-account">Créer un compte</h2>
+                        <div class="signup_first-name">
+                        <input type="text" placeholder="Prénom" v-model="userObjectSignup.firstName">
+                    </div>
 
-                <button v-on:click="login(userObjectLogin.emailAddress, userObjectLogin.password)">Connexion</button>
+                    <div class="signup_last-name">
+                        <input type="text" placeholder="Nom de famille" v-model="userObjectSignup.lastName">
+                    </div>
+
+                    <div class="signup_email">
+                        <input type="text" placeholder="Adresse email" v-model="userObjectSignup.emailAddress">
+                    </div>
+
+                    <div class="signup_password">
+                        <input type="password" placeholder="Mot de passe" v-model="userObjectSignup.password1">
+                    </div>
+
+                    <div class="signup_password_confirmation" >
+                        <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password2">
+                    </div>
+
+                    <button v-on:click="signup(userObjectSignup)">Inscription</button>
+                </div>
             </div>
-
-            <div class="signup">
-                <h2 class="create-account">Créer un compte</h2>
-                    <div class="signup_first-name">
-                    <input type="text" placeholder="Prénom" v-model="userObjectSignup.firstName">
-                </div>
-
-                <div class="signup_last-name">
-                    <input type="text" placeholder="Nom de famille" v-model="userObjectSignup.lastName">
-                </div>
-
-                <div class="signup_email">
-                    <input type="text" placeholder="Adresse email" v-model="userObjectSignup.emailAddress">
-                </div>
-
-                <div class="signup_password">
-                    <input type="password" placeholder="Mot de passe" v-model="userObjectSignup.password1">
-                </div>
-
-                <div class="signup_password_confirmation" >
-                    <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password2">
-                </div>
-
-                <button v-on:click="signup(userObjectSignup)">Inscription</button>
-            </div>
-        
         </div>
         <Footer />
     </div>
@@ -89,14 +88,6 @@ export default {
                 URL: this.URL
             })
             .then(() => {
-                // let userObject = {
-                //     id: response.data.user.id,
-                //     emailAddress: response.data.user.emailAddress,
-                //     firstName: response.data.user.firstName,
-                //     lastName: response.data.user.lastName,
-                //     biography: response.data.user.biography,
-                //     profileImage: response.data.user.profileImage,
-                // }
                 this.$router.push("/Home")
             });
         },
@@ -125,18 +116,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
 .container{
-    min-height: 100vh;
-    background-color: #B0D8FF;
-    position: relative;
+    height: calc(100vh - (4.5em * 2));
 }
 
-Footer{
-    position: absolute;
-    bottom: 0px;
-}
-
-.connection-page{
+.connection-page-header{
+    top: 0;
     height: 4.5em;
     width: 100%;
 
@@ -165,6 +152,7 @@ input{
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    height: 100%;
 
     @media screen and (max-width: 425px) {
         flex-direction: column;
