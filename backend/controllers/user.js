@@ -85,10 +85,10 @@ exports.deleteUser = (req, res) => {
     // On cherche d'abord l'utilisateur pour récupérer le nom du fichier image à supprimer
     User.findByPk(id)
     .then(user => {
-        if(user.profileImage){
-            const filename = user.profileImage.split('/images/')[1];
+        const profilePicture = user.profileImage.split('/images/')[1];
+        if(profilePicture != 'default_profile_picture.jpg'){
             fs.unlink(`images/${filename}`, () => {
-                User.destroy({ where: { id: id } })
+                user.destroy({ where: { id: id } })
                 .then(num => {
                     if (num == 1) {
                         res.status(200).json({ message: "User was deleted successfully!"});
@@ -119,9 +119,27 @@ exports.deleteUser = (req, res) => {
     });
 };
 
+exports.updateProfilePicture = (req, res) => {
+    const profileImage = req.body.formData;
+    const userId = req.params.id
+
+    // profileImage = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    User.update(profileImage, {where: { id: userId }})
+        .then(updatedRows => {
+            if (updatedRows == 1) {
+            res.status(200).json({ message: "Your post was updated successfully." });
+            } else {
+            res.status(400).json({ message: `Cannot update the post with id=${id}. Maybe post was not found or req.body is empty!` });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({ message: "Error updating the post with id=" + id });
+        });
+};
+
 // Modify user account.
 exports.updateUser = (req, res) => {
-    const id = req.params.id;
+    const userId = req.params.id;
 
     // Création d'un nouvel objet. Si pas d'image, alors on envoie req.body, si une image, on la nomme accordingly.
     const userObject = req.file ?
@@ -130,17 +148,42 @@ exports.updateUser = (req, res) => {
             profileImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
 
-    User.update(userObject, {where: { id: id }})
-        .then(updatedRows => {
-            if (updatedRows == 1) {
-                res.status(200).json({ message: "User account was updated successfully." });
-            } else {
-                res.status(400).json({ message: `Cannot update User account with id=${id}. Maybe User account was not found or req.body is empty!` });
+    User.findOne({where: {id: userId}})
+        .then((user) => {
+
+            const registeredImage = user.profileImage.split('/images/')[1];
+            if(user.id == userId){
+
+                if(userObject.profileImage && userObject.profileImage != user.profileImage && registeredImage != 'default_profile_picture.jpg'){
+                    
+                    fs.unlink(`images/${registeredImage}`, () => {
+
+                        user.update(userObject)
+                        .then(updatedRows => {
+                            if (updatedRows == 1) {
+                                res.status(200).json({ message: "User account was updated successfully." });
+                            }else{
+                                res.status(400).json({ message: `Cannot update User account with id=${userId}. Maybe User account was not found or req.body is empty!` });
+                            }
+                        })
+                        .catch(function () {
+                            res.status(500).send({ message: "Error updating User account with id=" + userId });
+                        });
+                    })
+                }
+                User.update(userObject, {where: {id: userId}})
+                    .then(updatedRows => {
+                        if (updatedRows == 1) {
+                            res.status(200).json({ message: "User account was updated successfully." });
+                        }else{
+                            res.status(400).json({ message: `Cannot update User account with id=${userId}. Maybe User account was not found or req.body is empty!` });
+                        }
+                    })
+                    .catch(function () {
+                        res.status(500).send({ message: "Error updating User account with id=" + userId });
+                    });
             }
         })
-        .catch(err => {
-            res.status(500).send({ message: "Error updating User account with id=" + id });
-        });
 };
 
 // Find all posts of a specific user.

@@ -17,7 +17,12 @@ router.get("/:id", auth, multer, users.findUser);
 router.delete("/:id", auth, users.deleteUser);
 
 // Update user account
-router.put("/:id", auth, users.updateUser);
+router.put("/:id", multer, users.updateUser);
+
+// Update profile picture
+// router.put("/:id/profilePicture", multer, users.updateProfilePicture);
+
+
 
 
 module.exports = router;

@@ -22,7 +22,8 @@ state: {
     posts: [],
     userObject: {},
     loadedProfilePage: {},
-    isAdmin: false
+    isAdmin: false,
+    profilePicture: ''
 },
 mutations: {
     [LOGIN] (state) {
@@ -37,7 +38,6 @@ mutations: {
     }
 },
 actions: {
-
     login({ commit }, options) {
         if(options.emailAddress != "" && options.password != ""){
             commit(LOGIN); // show spinner
@@ -47,7 +47,6 @@ actions: {
                     password: options.password
                 })
                 .then((response) => {
-                    console.log(response)
                     this.state.token = `Bearer ${response.data.token}`
                     this.state.userObject = response.data.user
                     commit(LOGIN_SUCCESS);
@@ -68,7 +67,5 @@ getters: {
     isLoggedIn: state => {
         return state.isLoggedIn
     }
-},
-modules: {
 }
 })

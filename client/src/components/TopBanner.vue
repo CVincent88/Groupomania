@@ -33,7 +33,8 @@ export default {
     methods: {
         logout() {
             localStorage.clear();
-            this.$store.state.loadedProfilePage = {}
+            // this.$store.state.loadedProfilePage = {}
+            location.reload()
         }
     }
 }

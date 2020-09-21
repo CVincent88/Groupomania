@@ -5,8 +5,7 @@
         <div class="container">
             <div class="information">
                 <div class="information_user">
-                    <img src="../../public/images/default_profile_picture.jpg" alt="Profile picture">
-                    <router-link :to="{
+                    <img :src="require(`../../../backend/images/${this.profilePicture}`)" alt="Profile picture">                    <router-link :to="{
                     name: 'ProfilePage', 
                     params: { profileToLoad: this.userObject.id }}" 
                     class="information_user_name">{{ userObject.firstName }} {{ userObject.lastName }}</router-link>
@@ -51,7 +50,8 @@ export default {
     },
     data() {
         return {
-            userObject: this.$store.state.userObject
+            userObject: this.$store.state.userObject,
+            profilePicture: ''
         }
     },
     beforeMount() {
@@ -62,8 +62,18 @@ export default {
         })
         .then((res) => {
             this.myName = res.data.firstName + ' ' + res.data.lastName
+            // const picture = res.data.profileImage.split('images/')[1];
+            this.profilePicture = res.data.profileImage.split('images/')[1];
+            // this.profilePicture = `../../../backend/images/${picture}`
+            console.log(this.profilePicture)
         })
-    }
+    },
+    // computed: {
+    //     profilePic(){
+    //         // return require(`../../../backend/images/profile123.jpeg1600624129039.jpg`);
+    //         return require(`../../../backend/images/${this.profilePicture}`);
+    //     }
+    // }
 }
 </script>
 
@@ -75,6 +85,7 @@ export default {
     justify-content: center;
     width: 95%;
     margin: 20px auto;
+    min-height: calc(100vh - (5em * 2));
 
     & .container{
         display: flex;
@@ -90,6 +101,11 @@ export default {
             &_user{
                 display: flex;
                 flex-direction: column;
+
+                & img{
+                    max-height: 200px;
+                    max-width: 200px;
+                }
 
                 &_name{
                     margin-top: 10px;

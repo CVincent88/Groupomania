@@ -24,7 +24,8 @@ module.exports = (sequelize, Sequelize) => {
         },
         profileImage: {
             type: Sequelize.STRING,
-            allowNull: true
+            allowNull: true,
+            defaultValue: 'http://localhost:5000/images/default_profile_picture.jpg'
         },
         isAdmin: {
             type: Sequelize.BOOLEAN,

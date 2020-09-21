@@ -8,14 +8,17 @@
                 <div class="profile">
                     <div class="profile_picture">
                         <div>
-                            <img src="../../public/images/default_profile_picture.jpg" alt="">
+                            <img v-if="newProfilePicture == ''" :src="require(`../../../backend/images/${this.profilePicture}`)" alt="Profile picture">
+                            <img v-else-if="newProfilePicture != '' && file != ''" :src="newProfilePicture" alt="Profile picture">
                             <input 
+                            id="file"
                             type="file"
                             style="display: none"
-                            @change="onFileSelected" 
-                            ref="fileInput">
-                            <button @click="$refs.fileInput.click()">Choisir</button>
-                            <button @click="saveProfilePicture">Upload</button>
+                            @change="handleFileUpload()" 
+                            ref="file">
+                            <span v-if="this.newProfilePictureName != ''">{{ this.newProfilePictureName }}</span>
+                            <button @click="$refs.file.click()">Choisir</button>
+                            <button @click="submitFile()">Upload</button>
                         </div>
                     </div>
                     <p class="aboutMe">À propos de moi: </p>
@@ -55,8 +58,7 @@
                 <div class="profile">
                     <div class="profile_picture">
                         <div>
-                            <img src="../../public/images/default_profile_picture.jpg" alt="">
-                        </div>
+                            <img :src="require(`../../../backend/images/${this.profilePicture}`)" alt="">                        </div>
                     </div>
                     <p class="aboutMe">À propos de {{ loadedProfile.firstName }} {{ loadedProfile.lastName }}: </p>
                     <div class="biography">
@@ -92,14 +94,18 @@ export default {
             modifyBiography: false,
             newBiography: '',
             registeredBiography: '',
-            newProfilePicture: '',
             username: '',
             userObject: this.$store.state.userObject,
             posts: [],
             alreadyPosted: [],
             postsDisplayed: false,
             isHidden: false,
-            loadedProfile: {}
+            loadedProfile: {},
+            file: '',
+            profilePicture: '',
+            profileImageUrl: '',
+            newProfilePicture: '',
+            newProfilePictureName: '',
         }
     },
     components: {
@@ -111,27 +117,34 @@ export default {
         profileToLoad: Object
     },
     methods: {
-        hideButton() {
-
-        },
         // Upload profile picture
-        onFileSelected(event) {
-            this.profileImage = event.target.files[0]
+        handleFileUpload(){
+            this.file = this.$refs.file.files[0];
+            const fileName = URL.createObjectURL(this.file)
+            this.newProfilePicture = fileName
+            this.newProfilePictureName = this.file.name
         },
-        saveProfilePicture() {
-            axios.put(this.$store.state.URL + 'users/' + this.$store.state.userObject.id, {
-                profileImage: this.profileImage
-            },
-            {
-                headers: {
-                    'Authorization': this.$store.state.token
-                }
+
+        submitFile(){
+            // Impossible to have Axios work with FormData, therefore, used fetch() instead.
+
+            const formData = new FormData();
+            formData.append('profilePicture', this.file);
+
+            fetch(this.$store.state.URL + 'users/' + this.$store.state.userObject.id, {
+                method: 'PUT',
+                body: formData
             })
-            .then((response) => {
-                console.log(response)
-            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Success:', result);
+                    this.newProfilePictureName = ''
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         },
-        // Delete account
+
         deleteAccount() {
             axios.delete(this.$store.state.URL + 'users/' + this.$store.state.userObject.id, {
                 headers: {
@@ -223,6 +236,7 @@ export default {
         })
         .then((res) => {
             this.loadedProfile = res.data
+            this.profilePicture = res.data.profileImage.split('images/')[1];
             this.registeredBiography = res.data.biography;
             this.profileImage = res.data.profileImage;
             this.username = res.data.firstName + ' ' + res.data.lastName

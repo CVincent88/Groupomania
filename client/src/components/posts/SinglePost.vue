@@ -2,7 +2,7 @@
 <div class="wrapper">
     <div class="user">
         <div class="user_info">
-            <img class="profile-picture" src="../../../public/images/default_profile_picture.jpg" alt="Default profile picture">
+            <img class="profile-picture" :src="require(`../../../../backend/images/${profilePicture}`)" alt="Default profile picture">
             <div @click="loadProfile(post.author)">
                 <router-link :to="{ 
                     name: 'ProfilePage', 
@@ -47,7 +47,8 @@ export default {
     },
     data() {
         return {
-            userObject: this.$store.state.userObject
+            userObject: this.$store.state.userObject,
+            profilePicture: this.post.author.profileImage.split('images/')[1]
         }
     },
     methods:{
@@ -210,7 +211,6 @@ export default {
         },
         loadProfile(profile){
             this.$store.state.loadedProfilePage = profile;
-            console.log(this.$store.state.loadedProfilePage.firstName)
         }
     }
 }
