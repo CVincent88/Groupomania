@@ -8,7 +8,7 @@ const posts = require("../controllers/post");
 router.get("/", auth, posts.findAllPosts);
 
 // Get one post
-router.get("/:id", posts.findOne);
+router.get("/:id", auth, posts.findOne);
 
 // Get all posts of a specific user
 router.get("/byAuthor/:authorId", auth, posts.findPostsByUser);
@@ -16,11 +16,8 @@ router.get("/byAuthor/:authorId", auth, posts.findPostsByUser);
 // Create a new post
 router.post("/", auth, multer, posts.createPost);
 
-// Modify one post
-router.put("/:id", auth, multer, posts.updatePost);
-
 // Delete one post
-router.delete("/:id", posts.deletePost);
+router.delete("/:id",auth, posts.deletePost);
 
 
 

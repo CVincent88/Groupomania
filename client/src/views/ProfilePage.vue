@@ -133,7 +133,10 @@ export default {
 
             fetch(this.$store.state.URL + 'users/' + this.$store.state.userObject.id, {
                 method: 'PUT',
-                body: formData
+                body: formData,
+                headers: {
+                    'Authorization': this.$store.state.token
+                }
             })
                 .then(response => response.json())
                 .then(result => {
@@ -152,8 +155,12 @@ export default {
                 }
             })
             .then(() => {
+                this.$store.state.posts = [];
                 localStorage.clear();
                 this.$router.push('/');
+            })
+            .catch((err) => {
+                console.log(err)
             })
         },
         // Modify biography

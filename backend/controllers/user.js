@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
                     res.status(201).json({ message: 'Account created!' });
                 })
                 .catch(function(err) {
-                    res.status(403).json({ message: 'Erreur lors de la création de compte, l\'adresse email est probablement déjà enregistrée' });
+                    res.status(403).json({ err });
                 });
         })
         .catch(err => {
@@ -83,12 +83,12 @@ exports.deleteUser = (req, res) => {
     const id = req.params.id;
 
     // On cherche d'abord l'utilisateur pour récupérer le nom du fichier image à supprimer
-    User.findByPk(id)
+    User.findOne({where: {id: id}})
     .then(user => {
-        const profilePicture = user.profileImage.split('/images/')[1];
-        if(profilePicture != 'default_profile_picture.jpg'){
-            fs.unlink(`images/${filename}`, () => {
-                user.destroy({ where: { id: id } })
+        const registeredImage = user.profileImage.split('/images/')[1];
+        if(registeredImage != 'default_profile_picture.jpg'){
+            fs.unlink(`images/${registeredImage}`, () => {
+                user.destroy()
                 .then(num => {
                     if (num == 1) {
                         res.status(200).json({ message: "User was deleted successfully!"});
@@ -117,24 +117,6 @@ exports.deleteUser = (req, res) => {
     .catch(err => {
         res.status(500).send({ message: "Error retrieving user with id=" + id });
     });
-};
-
-exports.updateProfilePicture = (req, res) => {
-    const profileImage = req.body.formData;
-    const userId = req.params.id
-
-    // profileImage = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    User.update(profileImage, {where: { id: userId }})
-        .then(updatedRows => {
-            if (updatedRows == 1) {
-            res.status(200).json({ message: "Your post was updated successfully." });
-            } else {
-            res.status(400).json({ message: `Cannot update the post with id=${id}. Maybe post was not found or req.body is empty!` });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({ message: "Error updating the post with id=" + id });
-        });
 };
 
 // Modify user account.
@@ -184,20 +166,4 @@ exports.updateUser = (req, res) => {
                     });
             }
         })
-};
-
-// Find all posts of a specific user.
-exports.findPostsByUser = (req, res) => {
-    const userId = req.params.id;
-
-    User.findOne({where: {
-        id: userId},
-        include: [{all:true}]
-    })
-    .then((user) => {
-        res.send(user)
-    })
-    .catch((err) => {
-    console.log("Error while find company : ", err)
-    })
 };

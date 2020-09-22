@@ -25,22 +25,11 @@ exports.createPost = (req, res) => {
         });
 };
 
-// Retrieve all posts from the database. (Sends them in descending order, last created first)
+// Retrieve all posts from the database.
 exports.findAllPosts = (req, res) => {
     Post.findAll(
         {include: [{all:true}],
         order: Sequelize.literal('rand()'), limit: 1})
-    .then(posts => {
-        res.status(200).json(posts);
-    })
-    .catch(err => {
-        res.status(500).send({ message: err.message || "Some error occurred while retrieving posts." });
-    });
-};
-
-// Retrieve latest post from the database.
-exports.findLatestPost = (req, res) => {
-    Post.findAll({include: 'author', order: [ [ 'createdAt', 'DESC' ]], limit: 1})
     .then(posts => {
         res.status(200).json(posts);
     })
@@ -61,36 +50,6 @@ exports.findOne = (req, res) => {
         .catch(err => {
             res.status(500).send({ message: "Error retrieving post with id=" + postId });
         });
-};
-
-// Modify a post from the database.
-exports.updatePost = (req, res, next) => {
-    // Appel du jwt pour empêcher de supprimer un post depuis un logiciel tiers (e.g. Postman)
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
-    const userId = decodedToken.userId;
-    const postId = req.params.id;
-
-    // We first look for the post
-    Post.findOne({ where: { id: postId } })
-        .then((post) => {
-            if(userId === post.authorId){
-                Post.update(req.body, {where: { id: postId }})
-                .then(updatedRows => {
-                    if (updatedRows == 1) {
-                    res.status(200).json({ message: "Your post was updated successfully." });
-                    } else {
-                    res.status(400).json({ message: `Cannot update the post with id=${id}. Maybe post was not found or req.body is empty!` });
-                    }
-                })
-                .catch(err => {
-                    res.status(500).send({ message: "Error updating the post with id=" + id });
-                });
-            }
-        })
-        .catch((err) =>{
-            res.status(500).json({ error: "Error while looking for the post"})
-        })
 };
 
 // Delete a post from database.

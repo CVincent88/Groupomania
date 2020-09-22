@@ -14,12 +14,12 @@
 
                     <div class="email">
                         <label for="email">Email: </label>
-                        <input type="text" v-model="userObjectLogin.emailAddress">
+                        <input type="text" v-model="userObjectLogin.emailAddress" ref="loginEmail" @change="deleteClassError('loginEmail')">
                     </div>
 
                     <div class="password">
                         <label for="password">Mot de passe: </label>
-                        <input type="password" v-model="userObjectLogin.password">
+                        <input type="password" v-model="userObjectLogin.password" ref="loginPassword" @change="deleteClassError('loginPassword')">
                     </div>
 
                     <button v-on:click="login(userObjectLogin.emailAddress, userObjectLogin.password)">Connexion</button>
@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="signup_email">
-                        <input type="text" placeholder="Adresse email" v-model="userObjectSignup.emailAddress">
+                        <input type="text" placeholder="Adresse email" v-model="userObjectSignup.emailAddress" ref="signupEmail" @change="deleteClassError('signupEmail')">
                     </div>
 
                     <div class="signup_password">
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="signup_password_confirmation" >
-                        <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password2">
+                        <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password2" ref="signupPasswordConfirmation" @change="deleteClassError('signupPasswordConfirmation')">
                     </div>
 
                     <button v-on:click="signup(userObjectSignup)">Inscription</button>
@@ -83,17 +83,24 @@ export default {
     methods: {
         login(email, password) {
             this.$store.dispatch("login", {
-                emailAddress: email,
-                password: password,
-                URL: this.URL
+                    emailAddress: email,
+                    password: password,
+                    URL: this.URL,
             })
             .then(() => {
                 this.$router.push("/Home")
-            });
+            })
+            .catch((err) => {
+                if(err.status == 401){
+                    this.$refs.loginPassword.classList.add('error');
+                }else if(err.status == 404){
+                    this.$refs.loginEmail.classList.add('error');
+                }
+            })
         },
         signup() {
             if (this.userObjectSignup.password1 != this.userObjectSignup.password2){
-                console.log('Attention, les mots de passe ne correspondent pas')
+                this.$refs.signupPasswordConfirmation.classList.add('error');
             }else{
                 axios.post(this.URL + 'signup', {
                     emailAddress: this.userObjectSignup.emailAddress,
@@ -104,11 +111,21 @@ export default {
                 .then(() => {
                     this.login(this.userObjectSignup.emailAddress, this.userObjectSignup.password2)
                 })
+                .catch(() => {
+                    this.$refs.signupEmail.classList.add('error');
+                })
             }
         },
-        verifyConformity(password1, password2) {
-            if(password1 != password2){
-                return false
+        deleteClassError(element){
+            if(element == 'signupEmail'){
+                this.$refs.signupEmail.classList.remove('error');
+            }else if(element == 'signupPasswordConfirmation'){
+                console.log('on est là')
+                this.$refs.signupPasswordConfirmation.classList.remove('error');
+            }else if(element == 'loginEmail'){
+                this.$refs.loginEmail.classList.remove('error');
+            }else if(element == 'loginPassword'){
+                this.$refs.loginPassword.classList.remove('error');
             }
         }
     },
@@ -116,7 +133,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 
 .container{
     height: calc(100vh - (4.5em * 2));
@@ -154,20 +170,12 @@ input{
     align-items: center;
     height: 100%;
 
-    @media screen and (max-width: 425px) {
-        flex-direction: column;
-    }
-
     & .login{
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr auto 1fr;
         justify-items: center;
         align-items: center;
-        
-        @media screen and (max-width: 820px) {
-            grid-template-rows: 1fr auto auto 1fr;
-        }
 
         & .registered{
             grid-row: 1 / 2;
@@ -182,9 +190,6 @@ input{
             align-items: flex-start;
             margin: 0 10px 15px 10px;
 
-            @media screen and (max-width: 820px) {
-                grid-column: 1 / 3;
-            }
         }
 
         & .password{
@@ -195,10 +200,6 @@ input{
             align-items: flex-start;
             margin: 0 10px 15px 10px;
 
-            @media screen and (max-width: 820px) {
-                grid-row: 3 / 4;
-                grid-column: 1 / 3;
-            }
         }
 
         & button{
@@ -214,10 +215,7 @@ input{
             font-size: 1.2em;
             font-weight: bold;
             cursor: pointer;
-
-            @media screen and (max-width: 820px) {
-                grid-row: 4 / 5;
-            }
+            
         }
     }
 
@@ -228,11 +226,6 @@ input{
         grid-template-rows: 1fr auto auto auto 1fr;
         justify-items: center;
         align-items: center;
-
-        @media screen and (max-width: 820px) {
-            grid-template-rows: 1fr repeat(4, auto) 1fr;
-        }
-
 
             & input::placeholder{
                 font-size: 1.2em;
@@ -320,6 +313,27 @@ input{
                 grid-row: 6 / 7 ;
             }
         }
+    }
+}
+
+.error{
+    border: 1px solid red;
+    animation: wiggle .2s;
+    animation-iteration-count: 2;
+}
+
+@keyframes wiggle{
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(3px);
+    }
+    75% {
+        transform: translateX(-3px);
+    }
+    100% {
+        transform: translateX(0);
     }
 }
 

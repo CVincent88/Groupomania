@@ -137,14 +137,13 @@ export default {
                 }else{
                     // Delete the like in the database
                     axios.delete(this.$store.state.URL + 'likes/', {
+                        // The Axios delete method won't accept a body, we have to use the req.param() option
+                        headers: {
+                            'Authorization': this.$store.state.token
+                        },
                         params: {
                             'authorId': this.userObject.id,
                             'postId': post.id   
-                        }
-                    },
-                    {
-                        headers: {
-                            'Authorization': this.$store.state.token,
                         }
                     })
                     .then(() => {
@@ -173,14 +172,13 @@ export default {
 
                     // Delete the like in the database
                     axios.delete(this.$store.state.URL + 'likes/', {
+                        // The Axios delete method won't accept a body, we have to use the req.param() option
+                        headers: {
+                            'Authorization': this.$store.state.token
+                        },
                         params: {
                             'authorId': this.userObject.id,
                             'postId': post.id   
-                        }
-                    },
-                    {
-                        headers: {
-                            'Authorization': this.$store.state.token,
                         }
                     })
                     .then(() => {
@@ -194,9 +192,6 @@ export default {
         deletePost(postId, authorId){
             if(this.$store.state.userObject.id == authorId || this.$store.state.userObject.isAdmin == true){
                 axios.delete(this.$store.state.URL + 'posts/' + postId, {
-
-                },
-                {
                     headers: {
                         'Authorization': this.$store.state.token
                     }

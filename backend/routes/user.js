@@ -1,7 +1,6 @@
 var router = require("express").Router();
 const multer = require('../middlewares/multer-config')
 const auth = require('../middlewares/auth');
-
 const users = require("../controllers/user");
 
 // Create a new user
@@ -17,12 +16,6 @@ router.get("/:id", auth, multer, users.findUser);
 router.delete("/:id", auth, users.deleteUser);
 
 // Update user account
-router.put("/:id", multer, users.updateUser);
-
-// Update profile picture
-// router.put("/:id/profilePicture", multer, users.updateProfilePicture);
-
-
-
+router.put("/:id", auth, multer, users.updateUser);
 
 module.exports = router;

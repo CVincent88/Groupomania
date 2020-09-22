@@ -23,42 +23,29 @@ exports.reactOnPost = (req, res, next) => {
         })
 };
 
-// exports.findOne = (req, res, next) => {
-//     Like.findOne({where: { authorId: req.body.authorId, postId: req.body.postId}})
-//     .then((result) => {
-//         res.status(200).json({result})
-//     })
-//     .catch(err => {
-//         res.status(404).json({err})
-//     })
-// };
-
-exports.findOne = (req, res, next) => {
-    const likeId = req.param('id')
-
-    Like.findByPk(likeId)
-    .then((result) => {
-        res.status(200).json({result})
-    })
-    .catch(err => {
-        res.status(404).json({err})
-    })
-};
-
 // Delete a reactioin
 exports.deleteReaction = (req, res) => {
+    
+    // The Axios delete method won't accept a body, we have to use the req.param() option
+    authorId = req.param('authorId');
+    postId = req.param('postId');
 
-    // const likeId = req.param('id');
-    // const likeId = req.params.id;
 
-    Like.destroy({where: {authorId: req.param('authorId'), postId: req.param('postId')}})
-        .then((deletedRows) => {
-            if(deletedRows == 1){
-                res.status(200).json({message: 'Like supprimé'});
-            }
+    Like.findOne({where: {authorId: authorId, postId: postId}})
+        .then((like) => {
+            Like.destroy({where: {id: like.id}})
+            .then((deletedRows) => {
+                if(deletedRows == 1){
+                    res.status(200).json({message: 'Like supprimé'});
+                }
+            })
+            .catch(err => {
+                res.status(500).send({ message: 'Error deleting the like', err });
+            });
         })
-        .catch(err => {
-            res.status(500).send({ message: "Error retrieving post with id=" + likeId });
-        });
+        .catch((err) => {
+            res.status(404).json({message: 'Like not found', err})
+        })
+
 };
 

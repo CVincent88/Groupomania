@@ -42,11 +42,16 @@ export default {
                         newPost.arrayOfReactions = {
                             likes: [],
                             dislikes: [],
-
                         }
                         this.$store.state.posts.unshift(newPost)
                     })
+                    .catch((err) => {
+                        console.log(err)
+                    })
                 }
+            })
+            .catch((err) => {
+                console.log(err)
             })
         },
         eraseText() {

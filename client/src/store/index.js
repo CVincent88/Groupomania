@@ -41,7 +41,7 @@ actions: {
     login({ commit }, options) {
         if(options.emailAddress != "" && options.password != ""){
             commit(LOGIN); // show spinner
-            return new Promise(resolve => {
+            return new Promise((resolve, reject) => {
                 axios.post(options.URL + 'login', {
                     emailAddress: options.emailAddress,
                     password: options.password
@@ -53,7 +53,7 @@ actions: {
                     resolve(response);
                 })
                 .catch(error => {
-                    console.log(error);
+                    reject(error.response);
                 })
             });
         }
