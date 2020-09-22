@@ -53,6 +53,7 @@ actions: {
                     resolve(response);
                 })
                 .catch(error => {
+                    // On renvoie le contenu de l'erreur pour la gérer correctement dans le composant Connection.vue
                     reject(error.response);
                 })
             });

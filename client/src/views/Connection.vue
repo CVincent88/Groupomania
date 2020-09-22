@@ -28,11 +28,11 @@
                 <div class="signup">
                     <h2 class="create-account">Créer un compte</h2>
                         <div class="signup_first-name">
-                        <input type="text" placeholder="Prénom" v-model="userObjectSignup.firstName">
+                        <input type="text" placeholder="Prénom" v-model="userObjectSignup.firstName" ref="signupFirstName" @change="deleteClassError('signupFirstName')">
                     </div>
 
                     <div class="signup_last-name">
-                        <input type="text" placeholder="Nom de famille" v-model="userObjectSignup.lastName">
+                        <input type="text" placeholder="Nom de famille" v-model="userObjectSignup.lastName" ref="signupLastName" @change="deleteClassError('signupLastName')">
                     </div>
 
                     <div class="signup_email">
@@ -40,11 +40,11 @@
                     </div>
 
                     <div class="signup_password">
-                        <input type="password" placeholder="Mot de passe" v-model="userObjectSignup.password1">
+                        <input type="password" placeholder="Mot de passe" v-model="userObjectSignup.password1" ref="signupPassword1" @change="deleteClassError('signupPassword1')">
                     </div>
 
                     <div class="signup_password_confirmation" >
-                        <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password2" ref="signupPasswordConfirmation" @change="deleteClassError('signupPasswordConfirmation')">
+                        <input type="password" placeholder="Confirmer le mot de passe" v-model="userObjectSignup.password2" ref="signupPassword2" @change="deleteClassError('signupPassword2')">
                     </div>
 
                     <button v-on:click="signup(userObjectSignup)">Inscription</button>
@@ -91,16 +91,16 @@ export default {
                 this.$router.push("/Home")
             })
             .catch((err) => {
-                if(err.status == 401){
+                if(err.status == 401 || err.status === 400){
                     this.$refs.loginPassword.classList.add('error');
-                }else if(err.status == 404){
+                }else if(err.status == 404 || err.status === 400){
                     this.$refs.loginEmail.classList.add('error');
                 }
             })
         },
         signup() {
             if (this.userObjectSignup.password1 != this.userObjectSignup.password2){
-                this.$refs.signupPasswordConfirmation.classList.add('error');
+                this.$refs.signupPassword2.classList.add('error');
             }else{
                 axios.post(this.URL + 'signup', {
                     emailAddress: this.userObjectSignup.emailAddress,
@@ -111,17 +111,96 @@ export default {
                 .then(() => {
                     this.login(this.userObjectSignup.emailAddress, this.userObjectSignup.password2)
                 })
-                .catch(() => {
-                    this.$refs.signupEmail.classList.add('error');
+                .catch((err) => {
+                        switch (err.response.status) {
+
+                            case 432:
+                                this.$refs.signupFirstName.classList.add('error');
+                                break;
+                            case 433:
+                                this.$refs.signupLastName.classList.add('error');
+                                break;
+                            case 434:
+                                this.$refs.signupEmail.classList.add('error');
+                                break;
+                            case 435:
+                                this.$refs.signupPassword1.classList.add('error');
+                                this.$refs.signupPassword2.classList.add('error');
+                                break;
+                            case 436:
+                                this.$refs.signupFirstName.classList.add('error');
+                                this.$refs.signupLastName.classList.add('error');
+                                break;
+                            case 437:
+                                this.$refs.signupFirstName.classList.add('error');
+                                this.$refs.signupEmail.classList.add('error');
+                                break;
+                            case 438:
+                                this.$refs.signupFirstName.classList.add('error');
+                                this.$refs.signupPassword1.classList.add('error');
+                                this.$refs.signupPassword2.classList.add('error');
+                                break;
+                            case 439:
+                                this.$refs.signupFirstName.classList.add('error');
+                                this.$refs.signupLastName.classList.add('error');
+                                this.$refs.signupEmail.classList.add('error');
+                                break;
+                            case 440:
+                                this.$refs.signupFirstName.classList.add('error');
+                                this.$refs.signupLastName.classList.add('error');
+                                this.$refs.signupPassword1.classList.add('error');
+                                this.$refs.signupPassword2.classList.add('error');
+                                break;
+                            case 441:
+                                this.$refs.signupFirstName.classList.add('error');
+                                this.$refs.signupEmail.classList.add('error');
+                                this.$refs.signupPassword1.classList.add('error');
+                                this.$refs.signupPassword2.classList.add('error');
+                                break;
+                            case 442:
+                                this.$refs.signupLastName.classList.add('error');
+                                this.$refs.signupEmail.classList.add('error');
+                                break;
+                            case 443:
+                                this.$refs.signupLastName.classList.add('error');
+                                this.$refs.signupPassword1.classList.add('error');
+                                this.$refs.signupPassword2.classList.add('error');
+                                break;
+                            case 444:
+                                this.$refs.signupLastName.classList.add('error');
+                                this.$refs.signupEmail.classList.add('error');
+                                this.$refs.signupPassword1.classList.add('error');
+                                this.$refs.signupPassword2.classList.add('error');
+                                break;
+                            case 445:
+                                this.$refs.signupEmail.classList.add('error');
+                                this.$refs.signupPassword1.classList.add('error');
+                                this.$refs.signupPassword2.classList.add('error');
+                                break;
+                            case 446:
+                                this.$refs.signupFirstName.classList.add('error');
+                                this.$refs.signupLastName.classList.add('error');
+                                this.$refs.signupEmail.classList.add('error');
+                                this.$refs.signupPassword1.classList.add('error');
+                                this.$refs.signupPassword2.classList.add('error');
+                                break;
+                            default:
+                                console.log('Switch error');
+                        }
                 })
             }
         },
         deleteClassError(element){
             if(element == 'signupEmail'){
                 this.$refs.signupEmail.classList.remove('error');
-            }else if(element == 'signupPasswordConfirmation'){
-                console.log('on est là')
-                this.$refs.signupPasswordConfirmation.classList.remove('error');
+            }else if(element == 'signupFirstName'){
+                this.$refs.signupFirstName.classList.remove('error');
+            }else if(element == 'signupLastName'){
+                this.$refs.signupLastName.classList.remove('error');
+            }else if(element == 'signupPassword1'){
+                this.$refs.signupPassword1.classList.remove('error');
+            }else if(element == 'signupPassword2'){
+                this.$refs.signupPassword2.classList.remove('error');
             }else if(element == 'loginEmail'){
                 this.$refs.loginEmail.classList.remove('error');
             }else if(element == 'loginPassword'){
