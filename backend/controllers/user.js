@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 
+
 // Create and Save a new user.
 exports.signup = (req, res) => {
-    bcrypt.hash(req.body.password, 15)
+        bcrypt.hash(req.body.password, 15)
         .then(hash => {
             const newUser = {
                 ...req.body,

@@ -77,7 +77,7 @@ export default {
             userObjectLogin: {
                 emailAddress: '',
                 password: ''
-            },
+            }
         }
     },
     methods: {

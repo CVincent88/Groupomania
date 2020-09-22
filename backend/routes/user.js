@@ -1,13 +1,14 @@
 var router = require("express").Router();
 const multer = require('../middlewares/multer-config')
 const auth = require('../middlewares/auth');
+const inputCheck = require('../middlewares/inputCheck');
 const users = require("../controllers/user");
 
 // Create a new user
-router.post("/signup", users.signup);
+router.post("/signup", inputCheck, users.signup);
 
 // Login to user account
-router.post("/login", users.login);
+router.post("/login", inputCheck, users.login);
 
 // Get user info
 router.get("/:id", auth, multer, users.findUser);
