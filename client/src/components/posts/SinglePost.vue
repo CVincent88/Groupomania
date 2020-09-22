@@ -284,6 +284,7 @@ export default {
     background-color:  #7fb1d1;
     border-radius: 0 0 10px 10px;
     padding: 5px 0;
+    width: 100%;
 
     & > * .icon{
         cursor: pointer;

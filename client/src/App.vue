@@ -24,14 +24,14 @@ html, body {
     padding: 0px !important;
     box-sizing: border-box;
     background-color: #b0d8ff;
-    // min-height: 100vh;
+    font-size: 10px;
+
 }
 
 body{
     margin: 0;
     padding: 0;
-    min-height: 100vh;
-    position: relative;
+
 
     &::-webkit-scrollbar {
         width: .4em;

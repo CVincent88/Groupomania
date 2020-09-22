@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="posts">
-                    <button :class="{ hidden: isHidden }" @click="getUserPosts">Afficher mes publications</button>
+                    <button class="posts_display" :class="{ hidden: isHidden }" @click="getUserPosts">Afficher mes publications</button>
                     <ul>
                         <li class="list-element" v-for="post in posts" :key="post.id">
                             <SinglePost :post="post"/>
@@ -247,7 +247,7 @@ export default {
             this.registeredBiography = res.data.biography;
             this.profileImage = res.data.profileImage;
             this.username = res.data.firstName + ' ' + res.data.lastName
-        })
+        });
     }
 }
 </script>
@@ -260,10 +260,14 @@ export default {
         display: flex;
         width: 95%;
         justify-content: space-around;
+        align-items: center;
         margin: auto;
+        min-height: calc(100vh - (4rem + 4.3rem + 2.5rem + 2.5rem));
+        font-size: 1.6em;
 
-        @media screen and(max-width: 767px){
-            width: 95%;
+        @media screen and(max-width: 768px){
+            flex-direction: column;
+            align-items: center;
         }
 
         & .profile{
@@ -317,7 +321,6 @@ export default {
                 }
 
                 @media screen and(max-width: 767px){
-                    margin-top: 3em;
                     width: 100%;
                 }
 
@@ -366,27 +369,28 @@ export default {
                 align-items: center;
                 margin: 10px;
 
-                & .modifyBiography{
-                    height: 40px;
+                & button{
+                    min-height: 40px;
                     border: 0;
                     border-radius: 3px;
-                    background-color: rgb(37, 162, 219);
                     color: #FFFFFF;
                     font-size: 1.2em;
                     font-weight: bold;
                     cursor: pointer;
+
+                    @media screen and(max-width: 500px) {
+                        font-size: 1em;
+                    }
+
+                }
+
+                & .modifyBiography{
+                    background-color: rgb(37, 162, 219);
                     margin: 15px;
                 }
 
                 & .deleteAccount{
-                    height: 40px;
-                    border: 0;
-                    border-radius: 3px;
                     background-color: rgb(206, 0, 0);
-                    color: #FFFFFF;
-                    font-size: 1.2em;
-                    font-weight: bold;
-                    cursor: pointer;
                 }
             }
         }
@@ -394,30 +398,48 @@ export default {
         & .posts{
             min-width: 50%;
             max-height: 60vh;
-            overflow: auto;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
 
-            &::-webkit-scrollbar {
-                width: .2em;
+            @media screen and(max-width: 768px) {
+                width: 99%;
+                max-height: 90vh;
             }
-            &::-webkit-scrollbar-track {
-                box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+
+            &_display{
+                height: 40px;
+                border: 0;
+                border-radius: 3px;
+                background-color: #557D96;
+                color: #ffffff;
+                font-size: 1.2em;
+                font-weight: bold;
+                cursor: pointer;
+                margin: 15px;
             }
-            
-            &::-webkit-scrollbar-thumb {
-                background-color: darkgrey;
-                outline: 1px solid slategrey;
-            }
+
 
             & ul{
                 min-width: 90%;
-                max-height: 100%;
+                height: 100%;
                 padding-inline-start: 0;  
                 list-style-type: none;
                 padding: 15px;
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    width: .2em;
+                }
+                &::-webkit-scrollbar-track {
+                    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                }
+                
+                &::-webkit-scrollbar-thumb {
+                    background-color: darkgrey;
+                    outline: 1px solid slategrey;
+                }
 
                 & .list-element{
                     position: relative;

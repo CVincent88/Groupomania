@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="container">
-            <router-link to="/Home" class="homelink">
+            <div class="logo">
                 <img src="../assets/icon.svg" alt="Icone Groupomania">
-                <h1>Groupomania</h1>
-            </router-link>
+                <span>Groupomania</span>
+            </div>
 
-            <div class="link">
+            <div class="links">
                 <span>Mentions légales</span>
                 <span>|</span>
                 <span>Contact</span>
@@ -27,20 +27,32 @@ export default {
 .container{
     display: flex;
     background-color: #557D96;
-    height: 4.5em;
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    position: absolute;
+    padding: 1em 0;
+    font-size: 1.6rem;
 
-    & .homelink{
+    @media screen and(max-width: 540px  ){
+        flex-direction: column;
+        margin-top: 1em;
+    }
+
+    & .logo{
         line-height: 0;
         display: flex;
         justify-content: center;
+        align-items: center;
+        font-weight: bold;  
         color: #FFFFFF;
         text-decoration: none;
         transition: color .3s;
         margin: 0 2em;
+        cursor: default;
+
+        @media screen and(max-width: 540px  ){
+            margin: .5em 0;
+        }        
 
         &:hover{
         color: #ff5c67;
@@ -50,18 +62,17 @@ export default {
             height: 1.5em;
         }
 
-        & h1{
-            line-height: 0.3em;
-            font-size: 1em;
-        }
-
     }
 
-    & .link{
+    & .links{
         margin: 0 2em;
 
         & span{
-            margin: 1em;
+            margin: .7em;
+        }
+
+        @media screen and(max-width: 540px  ){
+            margin-bottom: .5em;
         }
     }
 }

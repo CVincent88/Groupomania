@@ -1,12 +1,21 @@
 <template>
     <div>
         <div class="container">
-            <div class="homelink">
-                <router-link to="/Home" class="homelink_content">
-                    <img src="../assets/icon.svg" alt="Icone Groupomania">
-                    <h1>Groupomania</h1>
-                </router-link>
-            </div>
+            <hide-at :breakpoints="{medium: 600}" breakpoint="mediumAndBelow">
+                <div class="homelink">
+                    <router-link to="/Home" class="homelink_content">
+                        <img src="../assets/icon.svg" alt="Icone Groupomania">
+                        <h1>Groupomania</h1>
+                    </router-link>
+                </div>
+            </hide-at>
+            <show-at :breakpoints="{medium: 600}" breakpoint="mediumAndBelow">
+                <div class="homelink">
+                    <router-link to="/Home" class="homelink_content">
+                        <img src="../assets/icon.svg" alt="Icone Groupomania">
+                    </router-link>
+                </div>
+            </show-at>
 
 
             <div class="account">
@@ -21,6 +30,7 @@
 </template>
 
 <script>
+import {showAt, hideAt} from 'vue-breakpoints'
 
 export default {
     name: 'TopBanner',
@@ -29,6 +39,10 @@ export default {
             profileToLoad: this.$store.state.userObject.id,
             userName: '',
         }
+    },
+    components: {
+        hideAt, 
+        showAt 
     },
     methods: {
         logout() {
@@ -39,16 +53,17 @@ export default {
     }
 }
 </script>
+import {showAt, hideAt} from 'vue-breakpoints'
 
 <style lang="scss" scoped>
 
 .container {
     width: 100%;
-    height: 3em;
     background-color:#557d96;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.6rem;
 
     & .homelink{
         position: relative;
@@ -78,6 +93,10 @@ export default {
         flex-direction: row;
         width: 20%;
         justify-content: space-around;
+
+        @media screen and(max-width: 600px){
+            flex-grow: 3;
+        }
 
         & .profile-link{
             color: #FFFFFF;

@@ -1,5 +1,5 @@
 <template>
-    <div class="test">
+    <div>
         <header class="connection-page-header">
             <div class="connection-page-header_logo">
                 <router-link to="/">
@@ -81,6 +81,83 @@ export default {
         }
     },
     methods: {
+        errorDisplay(statusCode){
+            switch (statusCode) {
+                case 432:
+                    this.$refs.signupFirstName.classList.add('error');
+                    break;
+                case 433:
+                    this.$refs.signupLastName.classList.add('error');
+                    break;
+                case 434:
+                    this.$refs.signupEmail.classList.add('error');
+                    break;
+                case 435:
+                    this.$refs.signupPassword1.classList.add('error');
+                    this.$refs.signupPassword2.classList.add('error');
+                    break;
+                case 436:
+                    this.$refs.signupFirstName.classList.add('error');
+                    this.$refs.signupLastName.classList.add('error');
+                    break;
+                case 437:
+                    this.$refs.signupFirstName.classList.add('error');
+                    this.$refs.signupEmail.classList.add('error');
+                    break;
+                case 438:
+                    this.$refs.signupFirstName.classList.add('error');
+                    this.$refs.signupPassword1.classList.add('error');
+                    this.$refs.signupPassword2.classList.add('error');
+                    break;
+                case 439:
+                    this.$refs.signupFirstName.classList.add('error');
+                    this.$refs.signupLastName.classList.add('error');
+                    this.$refs.signupEmail.classList.add('error');
+                    break;
+                case 440:
+                    this.$refs.signupFirstName.classList.add('error');
+                    this.$refs.signupLastName.classList.add('error');
+                    this.$refs.signupPassword1.classList.add('error');
+                    this.$refs.signupPassword2.classList.add('error');
+                    break;
+                case 441:
+                    this.$refs.signupFirstName.classList.add('error');
+                    this.$refs.signupEmail.classList.add('error');
+                    this.$refs.signupPassword1.classList.add('error');
+                    this.$refs.signupPassword2.classList.add('error');
+                    break;
+                case 442:
+                    this.$refs.signupLastName.classList.add('error');
+                    this.$refs.signupEmail.classList.add('error');
+                    break;
+                case 443:
+                    this.$refs.signupLastName.classList.add('error');
+                    this.$refs.signupPassword1.classList.add('error');
+                    this.$refs.signupPassword2.classList.add('error');
+                    break;
+                case 444:
+                    this.$refs.signupLastName.classList.add('error');
+                    this.$refs.signupEmail.classList.add('error');
+                    this.$refs.signupPassword1.classList.add('error');
+                    this.$refs.signupPassword2.classList.add('error');
+                    break;
+                case 445:
+                    this.$refs.signupEmail.classList.add('error');
+                    this.$refs.signupPassword1.classList.add('error');
+                    this.$refs.signupPassword2.classList.add('error');
+                    break;
+                case 446:
+                    this.$refs.signupFirstName.classList.add('error');
+                    this.$refs.signupLastName.classList.add('error');
+                    this.$refs.signupEmail.classList.add('error');
+                    this.$refs.signupPassword1.classList.add('error');
+                    this.$refs.signupPassword2.classList.add('error');
+                    break;
+                default:
+                    console.log('Switch error');
+            }
+        },
+
         login(email, password) {
             this.$store.dispatch("login", {
                     emailAddress: email,
@@ -112,81 +189,7 @@ export default {
                     this.login(this.userObjectSignup.emailAddress, this.userObjectSignup.password2)
                 })
                 .catch((err) => {
-                        switch (err.response.status) {
-
-                            case 432:
-                                this.$refs.signupFirstName.classList.add('error');
-                                break;
-                            case 433:
-                                this.$refs.signupLastName.classList.add('error');
-                                break;
-                            case 434:
-                                this.$refs.signupEmail.classList.add('error');
-                                break;
-                            case 435:
-                                this.$refs.signupPassword1.classList.add('error');
-                                this.$refs.signupPassword2.classList.add('error');
-                                break;
-                            case 436:
-                                this.$refs.signupFirstName.classList.add('error');
-                                this.$refs.signupLastName.classList.add('error');
-                                break;
-                            case 437:
-                                this.$refs.signupFirstName.classList.add('error');
-                                this.$refs.signupEmail.classList.add('error');
-                                break;
-                            case 438:
-                                this.$refs.signupFirstName.classList.add('error');
-                                this.$refs.signupPassword1.classList.add('error');
-                                this.$refs.signupPassword2.classList.add('error');
-                                break;
-                            case 439:
-                                this.$refs.signupFirstName.classList.add('error');
-                                this.$refs.signupLastName.classList.add('error');
-                                this.$refs.signupEmail.classList.add('error');
-                                break;
-                            case 440:
-                                this.$refs.signupFirstName.classList.add('error');
-                                this.$refs.signupLastName.classList.add('error');
-                                this.$refs.signupPassword1.classList.add('error');
-                                this.$refs.signupPassword2.classList.add('error');
-                                break;
-                            case 441:
-                                this.$refs.signupFirstName.classList.add('error');
-                                this.$refs.signupEmail.classList.add('error');
-                                this.$refs.signupPassword1.classList.add('error');
-                                this.$refs.signupPassword2.classList.add('error');
-                                break;
-                            case 442:
-                                this.$refs.signupLastName.classList.add('error');
-                                this.$refs.signupEmail.classList.add('error');
-                                break;
-                            case 443:
-                                this.$refs.signupLastName.classList.add('error');
-                                this.$refs.signupPassword1.classList.add('error');
-                                this.$refs.signupPassword2.classList.add('error');
-                                break;
-                            case 444:
-                                this.$refs.signupLastName.classList.add('error');
-                                this.$refs.signupEmail.classList.add('error');
-                                this.$refs.signupPassword1.classList.add('error');
-                                this.$refs.signupPassword2.classList.add('error');
-                                break;
-                            case 445:
-                                this.$refs.signupEmail.classList.add('error');
-                                this.$refs.signupPassword1.classList.add('error');
-                                this.$refs.signupPassword2.classList.add('error');
-                                break;
-                            case 446:
-                                this.$refs.signupFirstName.classList.add('error');
-                                this.$refs.signupLastName.classList.add('error');
-                                this.$refs.signupEmail.classList.add('error');
-                                this.$refs.signupPassword1.classList.add('error');
-                                this.$refs.signupPassword2.classList.add('error');
-                                break;
-                            default:
-                                console.log('Switch error');
-                        }
+                    this.errorDisplay(err.response.status)
                 })
             }
         },
@@ -214,29 +217,28 @@ export default {
 <style lang="scss" scoped>
 
 .container{
-    height: calc(100vh - (4.5em * 2));
+    min-height: calc(100vh - (6.4rem + 4.2rem));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.connection-page-header{
-    top: 0;
-    height: 4.5em;
-    width: 100%;
+.connection-page-header_logo{
 
-    &_logo{
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #557D96;
-        & a img{
-            height: 50px;
-        }
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #557D96;
+    & a img{
+        height: 5rem;
     }
+
 }
 
 input{
-    height: 25px;
-    width: 175px;
+    height: 2.5rem;
+    width: 17.5rem;
     border-radius: 2px 2px;
     border: 1px solid rgb(49, 49, 49);
     padding: 0 5px;
@@ -247,7 +249,10 @@ input{
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    height: 100%;
+
+    @media screen and(max-width: 500px){
+        flex-direction: column;
+    }
 
     & .login{
         display: grid;
@@ -255,10 +260,21 @@ input{
         grid-template-rows: 1fr auto 1fr;
         justify-items: center;
         align-items: center;
+        font-size: 1.6rem;
+
+        @media screen and(max-width: 650px){
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(4, .4fr);
+        }
 
         & .registered{
             grid-row: 1 / 2;
             grid-column: 1 / 3;
+
+            @media screen and(max-width: 650px){
+                grid-row: 1 / 2;
+                grid-column: 1 / 2;
+            }
         }
 
         & .email{
@@ -269,6 +285,10 @@ input{
             align-items: flex-start;
             margin: 0 10px 15px 10px;
 
+            @media screen and(max-width: 650px){
+                grid-row: 2 / 3;
+                grid-column: 1 / 2;
+            }
         }
 
         & .password{
@@ -279,6 +299,10 @@ input{
             align-items: flex-start;
             margin: 0 10px 15px 10px;
 
+            @media screen and(max-width: 650px){
+                grid-row: 3 / 4;
+                grid-column: 1 / 2;
+            }
         }
 
         & button{
@@ -294,7 +318,11 @@ input{
             font-size: 1.2em;
             font-weight: bold;
             cursor: pointer;
-            
+
+            @media screen and(max-width: 650px){
+                grid-row: 4 / 5;
+                grid-column: 1 / 2;
+            }
         }
     }
 
@@ -305,6 +333,12 @@ input{
         grid-template-rows: 1fr auto auto auto 1fr;
         justify-items: center;
         align-items: center;
+        font-size: 1.6rem;
+
+        @media screen and(max-width: 840px){
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(7, .2fr);
+        }
 
             & input::placeholder{
                 font-size: 1.2em;
@@ -314,14 +348,24 @@ input{
         & .create-account{
             grid-column: 1 / 3;
             grid-row: 1 / 2;
+
+            @media screen and(max-width: 840px){
+                grid-column: 1 / 2;
+                grid-row: 1 / 2;
+                padding-top: 2em;
+            }
+
+            @media screen and(max-width: 500px){
+                border-top: 1px solid rgba(54, 54, 54, 0.849);
+            }
         }
 
         &_first-name{
             grid-column: 1 / 2;
             grid-row: 2 / 3;
 
-            @media screen and (max-width: 820px) {
-                grid-column: 1 / 3;
+            @media screen and (max-width: 840px) {
+                grid-column: 1 / 2;
                 grid-row: 2 / 3;
             }
         }
@@ -331,8 +375,8 @@ input{
             grid-row: 2 / 3;
             width: 100%;
 
-            @media screen and (max-width: 820px) {
-                grid-column: 1 / 3;
+            @media screen and (max-width: 840px) {
+                grid-column: 1 / 2;
                 grid-row: 3 / 4;
             }
         }
@@ -347,8 +391,8 @@ input{
                 box-sizing: border-box;
             }
 
-            @media screen and (max-width: 820px) {
-                grid-column: 1 / 3;
+            @media screen and (max-width: 840px) {
+                grid-column: 1 / 2;
                 grid-row: 4 / 5;
             }
         }
@@ -357,8 +401,8 @@ input{
             grid-column: 1 / 2;
             grid-row: 4 / 5;
 
-            @media screen and (max-width: 820px) {
-                grid-column: 1 / 3;
+            @media screen and (max-width: 840px) {
+                grid-column: 1 / 2;
                 grid-row: 5 / 6;
             }
         }
@@ -369,6 +413,11 @@ input{
 
             & input::placeholder{
                 font-size: 1.1em;
+            }
+
+            @media screen and (max-width: 840px) {
+                grid-column: 1 / 2;
+                grid-row: 6 / 7;
             }
         }
 
@@ -387,9 +436,10 @@ input{
             font-weight: bold;
             cursor: pointer;
 
-            @media screen and (max-width: 820px) {
-                grid-column: 1 / 3;
-                grid-row: 6 / 7 ;
+            @media screen and (max-width: 840px) {
+                grid-column: 1 / 2;
+                grid-row: 7 / 8 ;
+                margin: 1em 0;
             }
         }
     }

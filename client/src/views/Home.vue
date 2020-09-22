@@ -26,7 +26,6 @@
             <PostThread :posts="this.$store.state.posts" />
         </div>
     </div>
-
     <Footer />
 </div>
 </template>
@@ -62,18 +61,10 @@ export default {
         })
         .then((res) => {
             this.myName = res.data.firstName + ' ' + res.data.lastName
-            // const picture = res.data.profileImage.split('images/')[1];
             this.profilePicture = res.data.profileImage.split('images/')[1];
-            // this.profilePicture = `../../../backend/images/${picture}`
             console.log(this.profilePicture)
         })
-    },
-    // computed: {
-    //     profilePic(){
-    //         // return require(`../../../backend/images/profile123.jpeg1600624129039.jpg`);
-    //         return require(`../../../backend/images/${this.profilePicture}`);
-    //     }
-    // }
+    }
 }
 </script>
 
@@ -84,13 +75,19 @@ export default {
     display: flex;
     justify-content: center;
     width: 95%;
-    margin: 20px auto;
-    min-height: calc(100vh - (5em * 2));
+    margin: 2.5rem auto;
+    min-height: calc(100vh - (4rem + 4.3rem + 2.5rem + 2.5rem));
+    font-size: 1.6rem;
+
+    @media screen and(max-width: 768px){
+        flex-direction: column;
+    }
 
     & .container{
         display: flex;
         justify-content: center;
-        margin: 0 15px;
+        margin: 0 1.5rem;
+        min-height: 100%;
 
         & .information{
             display: flex;
@@ -98,13 +95,17 @@ export default {
             align-items: center;
             position: fixed;
 
+            @media screen and(max-width: 768px){
+                position: relative;
+            }
+
             &_user{
                 display: flex;
                 flex-direction: column;
 
                 & img{
-                    max-height: 200px;
-                    max-width: 200px;
+                    max-height: 20rem;
+                    max-width: 20rem;
                 }
 
                 &_name{
@@ -165,6 +166,4 @@ export default {
 .fade-enter, .fade-leave-to {
     opacity: 0
 }
-
-
 </style>
