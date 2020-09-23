@@ -2,6 +2,10 @@
 
 Make sure MySql is running.
 
+Install Node.js on your machine.
+
+Clone the project on your machine.
+
 
 Create a .env file in Groupomania/backend with the following configuration:
 
@@ -37,9 +41,9 @@ JWT_KEY=yourJWTKey
  --> npm run serve.
 
 
-To create an admin account:
+ - To create an admin account:
 
-Create a regulare account directly on the app.
+Create a regular account directly on the app.
 
 Then, from MySql command line, type:
 
