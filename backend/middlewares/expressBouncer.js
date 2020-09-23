@@ -2,8 +2,8 @@ const bouncer = require ('express-bouncer')(600000, 3600000, 5); // Protection a
 
 bouncer.blocked = function (req, res, next, remaining)
 {   
-    res.send (429, "Too many requests have been made, therefore, your account has been blocked for security measures. " +
-        "Please wait " + remaining / 1000 + " seconds");
+    res.status(429).json({message: "Too many requests have been made, therefore, your account has been blocked for security measures. " +
+    "Please wait " + remaining / 1000 + " seconds"});
 };
 
 module.exports = bouncer;
