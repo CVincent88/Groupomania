@@ -34,7 +34,7 @@ export default {
     methods: {
         // Infinite scroll
         infiniteHandler($state) {
-            axios.get(this.$store.state.URL + 'posts/' + this.offSet, {
+            axios.get(this.$store.state.URL + 'posts/' + 'offset/' + this.offSet, {
                 headers: {
                     'Authorization': this.$store.state.token
                 }
@@ -46,7 +46,7 @@ export default {
                 if(thisPost != undefined){
                     thisPost.arrayOfReactions = this.createArrayOfReactions(thisPost);
                     
-                    // On enregistre
+                    // On enregistre et relance la boucle tant que le server renvoie un résultat
                     this.$store.state.posts.push(thisPost);
                     this.offSet ++;
                     $state.loaded();

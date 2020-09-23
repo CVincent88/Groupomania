@@ -20,6 +20,7 @@ state: {
     token: '',
     URL: 'http://localhost:5000/api/v1/',
     posts: [],
+    myPosts: [],
     userObject: {},
     loadedProfilePage: {},
     isAdmin: false,

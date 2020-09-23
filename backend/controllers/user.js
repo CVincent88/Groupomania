@@ -3,6 +3,7 @@ const User = models.user;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
+const bouncer = require('../middlewares/expressBouncer')
 
 
 // Create and Save a new user.
@@ -45,6 +46,7 @@ exports.login = function(req, res) {
                             if(!valid) {
                                 return res.status(401).json({ message: 'Mot de passe incorrect'});
                             }
+                            bouncer.reset(req);
                             res.status(200).json({
                                 token: jwt.sign(
                                     {userId: user.id},

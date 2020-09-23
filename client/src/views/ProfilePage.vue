@@ -18,7 +18,7 @@
                             ref="file">
                             <span v-if="this.newProfilePictureName != ''">{{ this.newProfilePictureName }}</span>
                             <button @click="$refs.file.click()">Choisir</button>
-                            <button @click="submitFile()">Upload</button>
+                            <button @click="submitFile()">Enregistrer</button>
                         </div>
                     </div>
                     <p class="aboutMe">À propos de moi: </p>
@@ -43,7 +43,7 @@
                 <div class="posts">
                     <button class="posts_display" :class="{ hidden: isHidden }" @click="getUserPosts">Afficher mes publications</button>
                     <ul>
-                        <li class="list-element" v-for="post in posts" :key="post.id">
+                        <li class="list-element" v-for="post in this.$store.state.myPosts" :key="post.id">
                             <SinglePost :post="post"/>
                         </li>
                     </ul>
@@ -70,7 +70,7 @@
                 <div v-if="this.$store.state.userObject.isAdmin == true" class="posts">
                     <button :class="{ hidden: isHidden }" @click="getUserPosts">Afficher les publications</button>
                     <ul>
-                        <li class="list-element" v-for="post in posts" :key="post.id">
+                        <li class="list-element" v-for="post in this.$store.state.myPosts" :key="post.id">
                             <SinglePost :post="post"/>
                         </li>
                     </ul>
@@ -96,13 +96,11 @@ export default {
             registeredBiography: '',
             username: '',
             userObject: this.$store.state.userObject,
-            posts: [],
             postsDisplayed: false,
             isHidden: false,
             loadedProfile: {},
             file: '',
             profilePicture: '',
-            profileImageUrl: '',
             newProfilePicture: '',
             newProfilePictureName: '',
         }
@@ -138,8 +136,8 @@ export default {
                 }
             })
                 .then(response => response.json())
-                .then(result => {
-                    console.log('Success:', result);
+                .then(() => {
+                    console.log('Success:');
                     this.newProfilePictureName = ''
                 })
                 .catch(error => {
@@ -193,7 +191,7 @@ export default {
                         for(let i=0; i<response.data.length; i++){
                             const thisPost = response.data[i]
                             thisPost.arrayOfReactions = this.createArrayOfReactions(thisPost);
-                            this.posts.push(thisPost);
+                            this.$store.state.myPosts.push(thisPost);
                             this.isHidden = true;
                         }
                         this.postsDisplayed = true
@@ -244,8 +242,7 @@ export default {
             this.loadedProfile = res.data
             this.profilePicture = res.data.profileImage.split('images/')[1];
             this.registeredBiography = res.data.biography;
-            this.profileImage = res.data.profileImage;
-            this.username = res.data.firstName + ' ' + res.data.lastName
+
         });
     }
 }

@@ -62,7 +62,6 @@ export default {
         .then((res) => {
             this.myName = res.data.firstName + ' ' + res.data.lastName
             this.profilePicture = res.data.profileImage.split('images/')[1];
-            console.log(this.profilePicture)
         })
     }
 }
@@ -81,6 +80,7 @@ export default {
 
     @media screen and(max-width: 768px){
         flex-direction: column;
+        justify-content: space-between;
     }
 
     & .container{

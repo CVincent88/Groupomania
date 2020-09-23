@@ -197,8 +197,11 @@ export default {
                     }
                 })
                 .then(() => {
-                    // This line is here so that the post is taken off the DOM as well
-                    this.removeObjectFromArray(this.$store.state.posts, "id", `${postId}`)
+                    if(this.$route.name == 'Home'){
+                        this.removeObjectFromArray(this.$store.state.posts, "id", `${postId}`)
+                    }else if(this.$route.name == 'ProfilePage'){
+                        this.removeObjectFromArray(this.$store.state.myPosts, "id", `${postId}`)
+                    }
                 })
             }else{
                 console.log('Vous n\'êtes pas autorisé à supprimer ce message')
