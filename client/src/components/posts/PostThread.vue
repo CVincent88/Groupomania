@@ -4,7 +4,7 @@
             <li class="list-element" v-for="post in posts" :key="post.id">
                 <SinglePost :post="post"/>
             </li>
-            <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+            <infinite-loading @infinite="infiniteHandler" spinner="circles"></infinite-loading>
         </ul>
     </div>
 </template>
@@ -28,13 +28,13 @@ export default {
     },
     data() {
         return {
-            alreadyPosted: []
+            offSet: 0
         }
     },
     methods: {
         // Infinite scroll
         infiniteHandler($state) {
-            axios.get(this.$store.state.URL + 'posts/', {
+            axios.get(this.$store.state.URL + 'posts/' + this.offSet, {
                 headers: {
                     'Authorization': this.$store.state.token
                 }
@@ -43,40 +43,15 @@ export default {
             .then((post) => {
                 const thisPost = post.data[0];
 
-                // Will check if the post id is already in the posts array
-                const foundInPosts = this.$store.state.posts.find(element => element.id === thisPost.id);
-                // Will check if the post id is already in the alreadyPosted array
-                const foundInPosted = this.alreadyPosted.find(element => element.id === thisPost.id);
-                
-                // If the database is empty
-                if (post.data.length < 1){
-                    $state.complete();
-                }
-
-                // If it has not been displayed yet
-                else if (!foundInPosts) {
-                    
-                    // On calcule le nombre de likes et dislikes
+                if(thisPost != undefined){
                     thisPost.arrayOfReactions = this.createArrayOfReactions(thisPost);
                     
                     // On enregistre
                     this.$store.state.posts.push(thisPost);
+                    this.offSet ++;
                     $state.loaded();
-
-                // If it has been displayed but not registered in the alreadyPosted array
-                }else if(foundInPosts && !foundInPosted){
-                    this.alreadyPosted.push(thisPost);
-                    $state.loaded();
-
-                // If it has been displayed and registered in the alreadyPosted array
-                }else if(foundInPosts && foundInPosted){
-                    // If we have not displayed every post yet
-                    if(this.alreadyPosted.length < this.$store.state.posts.length){
-                        $state.loaded();
-                    // If we have displayed every post
-                    }else{
-                        $state.complete();
-                    }
+                }else{
+                    $state.complete();
                 }
             });
         },

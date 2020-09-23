@@ -27,9 +27,13 @@ exports.createPost = (req, res) => {
 
 // Retrieve all posts from the database.
 exports.findAllPosts = (req, res) => {
+    let offSet = JSON.parse(req.params.offSet);
     Post.findAll(
         {include: [{all:true}],
-        order: Sequelize.literal('rand()'), limit: 1})
+        // order: Sequelize.literal('rand()'), limit: 1})
+        order: [
+            ['createdAt', 'DESC']
+        ], offset: offSet, limit: 1})
     .then(posts => {
         res.status(200).json(posts);
     })

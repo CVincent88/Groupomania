@@ -5,7 +5,7 @@ const auth = require('../middlewares/auth');
 const posts = require("../controllers/post");
 
 // Get all posts
-router.get("/", auth, posts.findAllPosts);
+router.get("/:offSet", auth, posts.findAllPosts);
 
 // Get one post
 router.get("/:id", auth, posts.findOne);

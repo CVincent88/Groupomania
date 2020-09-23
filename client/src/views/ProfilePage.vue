@@ -97,7 +97,6 @@ export default {
             username: '',
             userObject: this.$store.state.userObject,
             posts: [],
-            alreadyPosted: [],
             postsDisplayed: false,
             isHidden: false,
             loadedProfile: {},
