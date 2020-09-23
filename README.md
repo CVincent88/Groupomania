@@ -9,8 +9,11 @@ Create a .env file in Groupomania/backend with the following configuration:
 NODE_ENV=development
 
 DB_HOST=localhost
+
 DB_USER=yourUsername
+
 DB_PASS=yourPassword
+
 DB_DIALECT=mysql
 
 JWT_KEY=yourJWTKey
