@@ -2,8 +2,33 @@
 
 Make sure MySql is running.
 
-To run the server, go to /Groupomania/backend:
+Create a .env file in Groupomania/backend with the following configuration:
 
+#######
+
+NODE_ENV=development
+
+DB_HOST=localhost
+DB_USER=yourUsername
+DB_PASS=yourPassword
+DB_DIALECT=mysql
+
+JWT_KEY=yourJWTKey
+
+#######
+
+
+
+ - To start the server, go to /Groupomania/backend (you may have to install npm):
 -> npm run start.
 
-To start Vue, with a second command line, go to /Groupomania/client -> npm run serve.
+ - To start Vue, with a second command line, go to /Groupomania/client (you may have to install npm):
+ -> npm run serve.
+
+
+To create an admin account:
+
+Create a regulare account directly on the app.
+Then, from MySql command line, type:
+
+UPDATE users SET isAdmin = 1 WHERE emailAddress = 'yourEmailAddress';
