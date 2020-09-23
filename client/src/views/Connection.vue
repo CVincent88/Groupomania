@@ -24,7 +24,13 @@
 
                     <button v-on:click="login(userObjectLogin.emailAddress, userObjectLogin.password)">Connexion</button>
                 </div>
-
+                <div ref="warning" class="warning">
+                    <p>
+                        - Les champs 'Prénom' et 'nom' ne peuvent pas contenir de caractères spéciaux. Les accents sont accéptés.<br>
+                        - L'adress email doit être au format standard xxxx@xxxx.xx, ou xxxx.xxxx@xxxx.xx<br>
+                        - Le mot de passe doit contenir au minimum 6 caractères et au maximum 15. Au moins une majuscule, une minuscule, un chiffre et pas d'espace. 
+                    </p>
+                </div>
                 <div class="signup">
                     <h2 class="create-account">Créer un compte</h2>
                         <div class="signup_first-name">
@@ -85,66 +91,80 @@ export default {
             switch (statusCode) {
                 case 432:
                     this.$refs.signupFirstName.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 433:
                     this.$refs.signupLastName.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 434:
                     this.$refs.signupEmail.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 435:
                     this.$refs.signupPassword1.classList.add('error');
                     this.$refs.signupPassword2.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 436:
                     this.$refs.signupFirstName.classList.add('error');
                     this.$refs.signupLastName.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 437:
                     this.$refs.signupFirstName.classList.add('error');
                     this.$refs.signupEmail.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 438:
                     this.$refs.signupFirstName.classList.add('error');
                     this.$refs.signupPassword1.classList.add('error');
                     this.$refs.signupPassword2.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 439:
                     this.$refs.signupFirstName.classList.add('error');
                     this.$refs.signupLastName.classList.add('error');
                     this.$refs.signupEmail.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 440:
                     this.$refs.signupFirstName.classList.add('error');
                     this.$refs.signupLastName.classList.add('error');
                     this.$refs.signupPassword1.classList.add('error');
                     this.$refs.signupPassword2.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 441:
                     this.$refs.signupFirstName.classList.add('error');
                     this.$refs.signupEmail.classList.add('error');
                     this.$refs.signupPassword1.classList.add('error');
                     this.$refs.signupPassword2.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 442:
                     this.$refs.signupLastName.classList.add('error');
                     this.$refs.signupEmail.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 443:
                     this.$refs.signupLastName.classList.add('error');
                     this.$refs.signupPassword1.classList.add('error');
                     this.$refs.signupPassword2.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 444:
                     this.$refs.signupLastName.classList.add('error');
                     this.$refs.signupEmail.classList.add('error');
                     this.$refs.signupPassword1.classList.add('error');
                     this.$refs.signupPassword2.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 445:
                     this.$refs.signupEmail.classList.add('error');
                     this.$refs.signupPassword1.classList.add('error');
                     this.$refs.signupPassword2.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 case 446:
                     this.$refs.signupFirstName.classList.add('error');
@@ -152,6 +172,7 @@ export default {
                     this.$refs.signupEmail.classList.add('error');
                     this.$refs.signupPassword1.classList.add('error');
                     this.$refs.signupPassword2.classList.add('error');
+                    this.$refs.warning.classList.add('warning_shown');
                     break;
                 default:
                     console.log('Switch error');
@@ -196,18 +217,25 @@ export default {
         deleteClassError(element){
             if(element == 'signupEmail'){
                 this.$refs.signupEmail.classList.remove('error');
+                this.$refs.warning.classList.remove('warning_shown');
             }else if(element == 'signupFirstName'){
                 this.$refs.signupFirstName.classList.remove('error');
+                this.$refs.warning.classList.remove('warning_shown');
             }else if(element == 'signupLastName'){
                 this.$refs.signupLastName.classList.remove('error');
+                this.$refs.warning.classList.remove('warning_shown');
             }else if(element == 'signupPassword1'){
                 this.$refs.signupPassword1.classList.remove('error');
+                this.$refs.warning.classList.remove('warning_shown');
             }else if(element == 'signupPassword2'){
                 this.$refs.signupPassword2.classList.remove('error');
+                this.$refs.warning.classList.remove('warning_shown');
             }else if(element == 'loginEmail'){
                 this.$refs.loginEmail.classList.remove('error');
+                this.$refs.warning.classList.remove('warning_shown');
             }else if(element == 'loginPassword'){
                 this.$refs.loginPassword.classList.remove('error');
+                this.$refs.warning.classList.remove('warning_shown');
             }
         }
     },
@@ -441,6 +469,18 @@ input{
                 grid-row: 7 / 8 ;
                 margin: 1em 0;
             }
+        }
+    }
+    & .warning{
+        background-color: rgba(255, 0, 0, 0.541);
+        font-size: 1.6em;
+        max-width:25%;
+        padding: 1em;
+        margin: 1em 0;
+        display: none;
+
+        &_shown{
+            display: block !important;
         }
     }
 }

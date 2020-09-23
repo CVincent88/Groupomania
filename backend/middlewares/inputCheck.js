@@ -6,7 +6,7 @@ schemaPassword
     .is().max(15)
     .has().uppercase()
     .has().lowercase()
-    .has().digits(2)
+    .has().digits(1)
     .has().not().spaces()
 
 const emailRegex = /^[a-zA-Z0-9.\-]{2,20}@([a-zA-Z0-9]{2,15})+(\.[a-zA-Z]{2,3})+((\.[a-zA-Z]{2,3})?)+$/
