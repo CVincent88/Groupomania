@@ -15,9 +15,11 @@ NODE_ENV=development
 
 DB_HOST=localhost
 
-DB_USER=yourUsername
+DB_USERNAME=yourUsername
 
-DB_PASS=yourPassword
+DB_PASSWORD=yourPassword
+
+DB_DATABSE=Groupomania
 
 DB_DIALECT=mysql
 
