@@ -2,7 +2,12 @@
 
 Make sure MySql is running.
 
-Create user in MySql (or use one existing)
+ - Create user in MySql (or use one existing)
+
+ - Create the MySql database:
+
+--> CREATE DATABASE groupomania CHARACTER SET 'utf8';
+
 
 Install Node.js on your machine.
 
