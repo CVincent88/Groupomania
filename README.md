@@ -2,12 +2,14 @@
 
 Make sure MySql is running.
 
+Create user in MySql (or use one existing)
+
 Install Node.js on your machine.
 
 Clone the project on your machine.
 
 
-Create a .env file in Groupomania/backend with the following configuration:
+ - Create a .env file in Groupomania/backend with the following configuration:
 
 #######
 
@@ -15,11 +17,11 @@ NODE_ENV=development
 
 DB_HOST=localhost
 
-DB_USERNAME=yourUsername
+DB_USERNAME=yourMysqlUsername
 
-DB_PASSWORD=yourPassword
+DB_PASSWORD=yourMysqlPassword
 
-DB_DATABSE=Groupomania
+DB_DATABASE=Groupomania
 
 DB_DIALECT=mysql
 
