@@ -16,7 +16,7 @@
                             style="display: none"
                             @change="handleFileUpload()" 
                             ref="file">
-                            <span v-if="this.newProfilePictureName != ''">{{ this.newProfilePictureName }}</span>
+                            <span v-if="this.newProfilePictureName != ''" class="profile_picture_name">{{ this.newProfilePictureName }}</span>
                             <button @click="$refs.file.click()">Choisir</button>
                             <button @click="submitFile()">Enregistrer</button>
                         </div>
@@ -279,6 +279,12 @@ export default {
                 display: flex;
                 flex-direction: column;
                 max-width: 100px;
+
+                &_name{
+                    display: block;
+                    max-width: 100%;
+                    word-break: break-word;
+                }
 
                 & .modifyProfilePicture{
                     margin-top: 20px;
