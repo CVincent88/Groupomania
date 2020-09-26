@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
         } else {
             next();
         }
-    } catch {
-        res.status(401).json({ error: 'Vous n\'êtes pas authentifié et ne pouvez donc accéder à la base de données' });
+    } catch(err) {
+        res.status(401).json({ error: 'Vous n\'êtes pas authentifié et ne pouvez donc accéder à la base de données', err });
     }
 };

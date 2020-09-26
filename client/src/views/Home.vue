@@ -63,6 +63,13 @@ export default {
             this.myName = res.data.firstName + ' ' + res.data.lastName
             this.profilePicture = res.data.profileImage.split('images/')[1];
         })
+        .catch((err) =>{
+            if(err.response.status == 401){
+                this.$router.push("/")
+            }else{
+                console.log('Error: ', err)
+            }
+        })
     }
 }
 </script>

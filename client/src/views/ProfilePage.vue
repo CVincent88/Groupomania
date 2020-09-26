@@ -140,9 +140,13 @@ export default {
                     console.log('Success:');
                     this.newProfilePictureName = ''
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                .catch((err) =>{
+                    if(err.response.status == 401){
+                        this.$router.push("/")
+                    }else{
+                        console.log('Error: ', err)
+                    }
+                })
         },
 
         deleteAccount() {
@@ -156,8 +160,12 @@ export default {
                 localStorage.clear();
                 this.$router.push('/');
             })
-            .catch((err) => {
-                console.log(err)
+            .catch((err) =>{
+                if(err.response.status == 401){
+                    this.$router.push("/")
+                }else{
+                    console.log('Error: ', err)
+                }
             })
         },
         // Modify biography
@@ -173,6 +181,13 @@ export default {
             .then(() => {
                 this.modifyBiography = false;
                 this.registeredBiography = this.newBiography;
+            })
+            .catch((err) =>{
+                if(err.response.status == 401){
+                    this.$router.push("/")
+                }else{
+                    console.log('Error: ', err)
+                }
             })
         },
         openModifyBiography() {
@@ -199,8 +214,12 @@ export default {
                         console.log('Erreur lors de l\'obtention des publications utilisateur')
                     }
                 })
-                .catch((err) => {
-                    console.log(err)
+                .catch((err) =>{
+                    if(err.response.status == 401){
+                        this.$router.push("/")
+                    }else{
+                        console.log('Error: ', err)
+                    }
                 })
             }
         },
@@ -242,8 +261,14 @@ export default {
             this.loadedProfile = res.data
             this.profilePicture = res.data.profileImage.split('images/')[1];
             this.registeredBiography = res.data.biography;
-
-        });
+        })
+        .catch((err) =>{
+            if(err.response.status == 401){
+                this.$router.push("/")
+            }else{
+                console.log('Error: ', err)
+            }
+        })
     }
 }
 </script>
