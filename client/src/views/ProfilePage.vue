@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="posts">
-                    <button class="posts_display" :class="{ hidden: isHidden }" @click="getUserPosts()">Afficher mes publications</button>
+                    <button class="posts_display" :class="{ hidden: isHidden }" @click="getUserPosts">Afficher mes publications</button>
                     <ul>
                         <li class="list-element" v-for="post in this.$store.state.myPosts" :key="post.id">
                             <SinglePost :post="post"/>

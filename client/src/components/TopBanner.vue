@@ -2,7 +2,7 @@
     <div>
         <div class="container">
             <hide-at :breakpoints="{medium: 600}" breakpoint="mediumAndBelow">
-                <div class="homelink">
+                <div class="homelink" @click="cleatMyPosts()">
                     <router-link to="/Home" class="homelink_content">
                         <img src="../assets/icon.svg" alt="Icone Groupomania">
                         <h1>Groupomania</h1>
@@ -19,7 +19,7 @@
 
 
             <div class="account">
-                <div class="profilePage" @click="clearStore">
+                <div class="profilePage" @click="clearStore()">
                     <router-link :to="{ name: 'ProfilePage', params: { profileToLoad } }" class="profile-link">Mon profil</router-link>
                 </div>
                 <div @click="logout">
@@ -52,8 +52,11 @@ export default {
             // this.$store.state.loadedProfilePage = {}
             location.reload()
         },
-        clearStore(){
-            this.$store.state.posts = []
+        clearPosts(){
+            this.$store.state.posts = [];
+        },
+        cleatMyPosts(){
+            this.$store.state.myPosts = [];
         }
     }
 }
