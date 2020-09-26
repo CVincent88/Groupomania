@@ -50,6 +50,9 @@ JWT_KEY=yourJWTKey
  --> npm run serve.
 
 
+ - By default, the app will run at http://localhost:8080
+
+
  - To create an admin account:
 
 Create a regular account directly on the app.
