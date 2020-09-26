@@ -19,7 +19,9 @@
 
 
             <div class="account">
-                <router-link :to="{ name: 'ProfilePage', params: { profileToLoad } }" class="profile-link">Mon profil</router-link>
+                <div class="profilePage" @click="clearStore">
+                    <router-link :to="{ name: 'ProfilePage', params: { profileToLoad } }" class="profile-link">Mon profil</router-link>
+                </div>
                 <div @click="logout">
                     <router-link class="logout" to="/" >Déconnexion</router-link>
                 </div>
@@ -49,6 +51,9 @@ export default {
             localStorage.clear();
             // this.$store.state.loadedProfilePage = {}
             location.reload()
+        },
+        clearStore(){
+            this.$store.state.posts = []
         }
     }
 }

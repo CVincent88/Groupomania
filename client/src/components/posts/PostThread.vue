@@ -46,9 +46,11 @@ export default {
                 if(thisPost != undefined){
                     thisPost.arrayOfReactions = this.createArrayOfReactions(thisPost);
                     
+                    
                     // On enregistre et relance la boucle tant que le server renvoie un résultat
                     this.$store.state.posts.push(thisPost);
                     this.offSet ++;
+                    console.log(this.$store.state.posts)
                     $state.loaded();
                 }else{
                     $state.complete();
