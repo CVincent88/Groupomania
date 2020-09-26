@@ -54,6 +54,7 @@ export default {
         }
     },
     beforeMount() {
+        this.$store.state.posts = [];
         axios.get(this.$store.state.URL + 'users/' + this.userObject.id, {
             headers: {
                 'Authorization': this.$store.state.token
