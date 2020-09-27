@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div v-if="this.$store.state.userObject.isAdmin == true" class="posts">
-                    <button :class="{ hidden: isHidden }" @click="getUserPosts">Afficher les publications</button>
+                    <button class="posts_display" :class="{ hidden: isHidden }" @click="getUserPosts">Afficher les publications</button>
                     <ul>
                         <li class="list-element" v-for="post in this.$store.state.myPosts" :key="post.id">
                             <SinglePost :post="post"/>
@@ -334,6 +334,7 @@ export default {
                 padding: 10px;
                 overflow: auto;
                 border: .1em solid rgba(0, 0, 0, 0.1);
+                max-width: 50%;
 
                 &::-webkit-scrollbar {
                     width: .2em;
@@ -352,7 +353,10 @@ export default {
                 }
 
                 &_text p{
+                    display: block;
+                    word-break: break-word;
                     margin: 0;
+                    
                 }
 
             }

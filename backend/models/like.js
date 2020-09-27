@@ -17,10 +17,8 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         reaction: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BOOLEAN,
             allowNull: false,
-            defaultvalue: 0,
-            possibleValues: [-1, 0, 1]
         }
     });
     Like.associate = function(models) {

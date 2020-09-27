@@ -31,6 +31,9 @@
                         - Le mot de passe doit contenir au minimum 6 caractères et au maximum 15. Au moins une majuscule, une minuscule, un chiffre et pas d'espace. 
                     </p>
                 </div>
+                <div ref="warningPassword" class="warningPassword">
+                    <p>Les mots de passe ne correspondent pas</p>
+                </div>
                 <div class="signup">
                     <h2 class="create-account">Créer un compte</h2>
                         <div class="signup_first-name">
@@ -189,7 +192,7 @@ export default {
                 this.$router.push("/Home")
             })
             .catch((err) => {
-                if(err.status == 401 || err.status === 400){
+                if(err.status == 401 ){
                     this.$refs.loginPassword.classList.add('error');
                 }else if(err.status == 404 || err.status === 400){
                     this.$refs.loginEmail.classList.add('error');
@@ -199,6 +202,7 @@ export default {
         signup() {
             if (this.userObjectSignup.password1 != this.userObjectSignup.password2){
                 this.$refs.signupPassword2.classList.add('error');
+                this.$refs.warningPassword.classList.add('warningPassword_shown');
             }else{
                 axios.post(this.URL + 'signup', {
                     emailAddress: this.userObjectSignup.emailAddress,
@@ -230,6 +234,7 @@ export default {
             }else if(element == 'signupPassword2'){
                 this.$refs.signupPassword2.classList.remove('error');
                 this.$refs.warning.classList.remove('warning_shown');
+                this.$refs.warningPassword.classList.remove('warningPassword_shown');
             }else if(element == 'loginEmail'){
                 this.$refs.loginEmail.classList.remove('error');
                 this.$refs.warning.classList.remove('warning_shown');
@@ -472,6 +477,19 @@ input{
         }
     }
     & .warning{
+        background-color: rgba(255, 0, 0, 0.541);
+        font-size: 1.6em;
+        max-width:25%;
+        padding: 1em;
+        margin: 1em 0;
+        display: none;
+
+        &_shown{
+            display: block !important;
+        }
+    }
+
+    & .warningPassword{
         background-color: rgba(255, 0, 0, 0.541);
         font-size: 1.6em;
         max-width:25%;
